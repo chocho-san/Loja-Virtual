@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "790196729018",
+    "project_id": "loja-virtual-453b2",
+    "storage_bucket": "loja-virtual-453b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790196729018:android:e08456be409bff508d3e83",
+        "android_client_info": {
+          "package_name": "marugen.loja_virtual"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790196729018-8puhpvqcn9auk4ovdf3rt7tp0ocpahbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMoL2LmSc3IQjIZhNsoS7aZ5TvqqMeVzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "790196729018-8puhpvqcn9auk4ovdf3rt7tp0ocpahbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

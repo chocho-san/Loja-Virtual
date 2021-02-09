@@ -11,7 +11,7 @@ class DrawerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        debugPrint('page $page');
+        debugPrint('page: $page');
       },
       child: SizedBox(
         height: 60,

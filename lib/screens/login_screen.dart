@@ -10,6 +10,7 @@ class LoginScreen extends StatelessWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final _passFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -18,81 +19,115 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('ログイン'),
         centerTitle: true,
+        actions: [
+          FlatButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/signup');
+              },
+            textColor: Colors.white,
+              child: Text(
+                'アカウント作成',
+                style: TextStyle(fontSize: 14),
+              ),
+          )
+        ],
       ),
       body: Center(
         child: Card(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
             key: formKey,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              shrinkWrap: true,
-              children: [
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(hintText: 'Eメール'),
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  validator: (email) {
-                    if (!emailValid(email)) {
-                      return 'このEメールは無効です';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: passController,
-                  decoration: const InputDecoration(hintText: 'パスワード'),
-                  autocorrect: false,
-                  obscureText: true,
-                  validator: (pass) {
-                    if (pass.isEmpty || pass.length < 6) {
-                      return 'パスワードが無効です';
-                    }
-                    return null;
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: FlatButton(
-                    onPressed: () {
-                    },
-                    padding: EdgeInsets.zero,
-                    child: const Text('パスワード忘れ'),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 44,
-                  child: RaisedButton(
-                    onPressed: () {
-                      if (formKey.currentState.validate()) {
-                        context.read<UserManager>().signIn(
-                            user: Users(
-                                email: emailController.text,
-                                password: passController.text),
-                            onFail: (e) {
-                              scaffoldKey.currentState.showSnackBar(
-                                 SnackBar(
-                                  content: Text('$e'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            },
-                            onSuccess: () {
-                            });
-                      }
-                    },
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
-                    child: const Text(
-                      'ログイン',
-                      style: TextStyle(fontSize: 18),
+            child: Consumer<UserManager>(
+              builder: (_, userManager, child) {
+                return ListView(
+                  padding: const EdgeInsets.all(16),
+                  shrinkWrap: true,
+                  children: [
+                    TextFormField(
+                      controller: emailController,
+                      enabled: !userManager.loading,
+                      decoration: const InputDecoration(hintText: 'Eメール'),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_passFocusNode);
+                      },
+                      autocorrect: false,
+                      validator: (email) {
+                        if (!emailValid(email)) {
+                          return 'このEメールは無効です';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                )
-              ],
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: passController,
+                      enabled: !userManager.loading,
+                      decoration: const InputDecoration(hintText: 'パスワード'),
+                      autocorrect: false,
+                      obscureText: true,
+                      focusNode: _passFocusNode,
+                      validator: (pass) {
+                        if (pass.isEmpty || pass.length < 6) {
+                          return 'パスワードが無効です';
+                        }
+                        return null;
+                      },
+                    ),
+                    child,
+                    SizedBox(height: 16),
+                    SizedBox(
+                      height: 44,
+                      child: RaisedButton(
+                        onPressed: userManager.loading
+                            ? null
+                            : () {
+                                if (formKey.currentState.validate()) {
+                                  userManager.signIn(
+                                    user: Users(
+                                        email: emailController.text,
+                                        password: passController.text),
+                                    onFail: (error) {
+                                      scaffoldKey.currentState.showSnackBar(
+                                        SnackBar(
+                                          content: Text(error),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    },
+                                    onSuccess: () {
+                                      print('成功');
+                                    },
+                                  );
+                                }
+                              },
+                        color: Theme.of(context).primaryColor,
+                        disabledColor:
+                            Theme.of(context).primaryColor.withAlpha(100),
+                        textColor: Colors.white,
+                        child: userManager.loading
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation(Colors.white),
+                              )
+                            : Text(
+                                'ログイン',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                      ),
+                    )
+                  ],
+                );
+              },
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: FlatButton(
+                  onPressed: () {},
+                  padding: EdgeInsets.zero,
+                  child: const Text('パスワード忘れ'),
+                ),
+              ),
             ),
           ),
         ),

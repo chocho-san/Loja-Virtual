@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:loja_virtual/models/user.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base_screen.dart';
+import 'screens/signup_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,9 +14,7 @@ Future<void> main() async {
       .collection('order')
       .doc('001')
       .snapshots()
-      .listen((document) {
-    print(document.data());
-  });
+      .listen((document) {});
 
   runApp(MyApp());
 }
@@ -25,8 +23,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_)=>UserManager(),
+    return ChangeNotifierProvider(
+      create: (_) => UserManager(),
       child: MaterialApp(
         title: 'Loja Virtual',
         debugShowCheckedModeBanner: false,
@@ -38,7 +36,19 @@ class MyApp extends StatelessWidget {
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BaseScreen(),
+        initialRoute: '/base',
+        onGenerateRoute: (settings){
+          switch(settings.name){
+            case '/signup' :
+              return MaterialPageRoute(
+                builder: (_)=> SignUpScreen()
+              );
+            case '/base' :
+              return MaterialPageRoute(
+                  builder: (_)=> BaseScreen()
+              );
+          }
+        },
       ),
     );
   }

@@ -4,6 +4,8 @@ import 'package:loja_virtual/models/user.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
+import 'signup_screen.dart';
+
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
@@ -22,7 +24,7 @@ class LoginScreen extends StatelessWidget {
         actions: [
           FlatButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/signup');
+                Navigator.of(context).pushNamed(SignUpScreen.routeName);
               },
             textColor: Colors.white,
               child: Text(
@@ -40,13 +42,13 @@ class LoginScreen extends StatelessWidget {
             child: Consumer<UserManager>(
               builder: (_, userManager, child) {
                 return ListView(
-                  padding: const EdgeInsets.all(16),
+                  padding:  EdgeInsets.all(16),
                   shrinkWrap: true,
                   children: [
                     TextFormField(
                       controller: emailController,
                       enabled: !userManager.loading,
-                      decoration: const InputDecoration(hintText: 'Eメール'),
+                      decoration:  InputDecoration(hintText: 'Eメール'),
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       onFieldSubmitted: (_) {
@@ -54,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       autocorrect: false,
                       validator: (email) {
-                        if (!emailValid(email)) {
+                       if (!emailValid(email)) {
                           return 'このEメールは無効です';
                         }
                         return null;
@@ -64,9 +66,9 @@ class LoginScreen extends StatelessWidget {
                     TextFormField(
                       controller: passController,
                       enabled: !userManager.loading,
-                      decoration: const InputDecoration(hintText: 'パスワード'),
+                      decoration:  InputDecoration(hintText: 'パスワード'),
                       autocorrect: false,
-                      obscureText: true,
+                      obscureText: true,/*入力を隠す*/
                       focusNode: _passFocusNode,
                       validator: (pass) {
                         if (pass.isEmpty || pass.length < 6) {

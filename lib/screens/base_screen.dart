@@ -5,6 +5,8 @@ import 'package:loja_virtual/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {
+  static const routeName = '/base';
+
   final PageController pageController = PageController();
 
   @override

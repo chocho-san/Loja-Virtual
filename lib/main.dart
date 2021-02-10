@@ -36,18 +36,10 @@ class MyApp extends StatelessWidget {
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: '/base',
-        onGenerateRoute: (settings){
-          switch(settings.name){
-            case '/signup' :
-              return MaterialPageRoute(
-                builder: (_)=> SignUpScreen()
-              );
-            case '/base' :
-              return MaterialPageRoute(
-                  builder: (_)=> BaseScreen()
-              );
-          }
+        home: BaseScreen(),
+        routes: {
+          BaseScreen.routeName:(context) => BaseScreen(),
+          SignUpScreen.routeName:(context) => SignUpScreen(),
         },
       ),
     );

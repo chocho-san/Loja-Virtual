@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/custom_drawer.dart';
 import 'package:loja_virtual/models/page_manager.dart';
-import 'package:loja_virtual/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -12,33 +11,33 @@ class BaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (_)=>PageManager(pageController),
+      create: (_) => PageManager(pageController),
       child: PageView(
         controller: pageController,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         children: [
-          LoginScreen(),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home'),
+              title: Text('Home'),
             ),
           ),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home2'),
+              title: Text('Products'),
             ),
           ),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home3'),
+              title: Text('Orders'),
             ),
-          ),          Scaffold(
+          ),
+          Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home4'),
+              title: Text('Location'),
             ),
           ),
         ],

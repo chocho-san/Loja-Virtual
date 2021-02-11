@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
 import 'package:loja_virtual/models/user.dart';
 import 'package:loja_virtual/models/user_manager.dart';
+import 'package:loja_virtual/screens/base_screen.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -9,7 +10,10 @@ class SignUpScreen extends StatelessWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final _nameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
   final _passFocusNode = FocusNode();
+  final _passComFocusNode = FocusNode();
 
 
   final Users user = Users();
@@ -26,18 +30,21 @@ class SignUpScreen extends StatelessWidget {
         child: Card(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
-              key: formKey,
-              child: Consumer<UserManager>(builder: (_, userManager, child) {
+            key: formKey,
+            child: Consumer<UserManager>(
+              builder: (_, userManager, __) {
                 return ListView(
                   padding: const EdgeInsets.all(16),
                   shrinkWrap: true,
                   children: [
                     TextFormField(
                       decoration: InputDecoration(hintText: '名前'),
+                      enabled: !userManager.loading,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_passFocusNode);
+                        FocusScope.of(context).requestFocus(_emailFocusNode);
                       },
+                      focusNode: _nameFocusNode,
                       autocorrect: false,
                       validator: (name) {
                         if (name.isEmpty) {
@@ -52,12 +59,15 @@ class SignUpScreen extends StatelessWidget {
                     SizedBox(height: 16),
                     TextFormField(
                       // controller: passController,
-                      // enabled: !userManager.loading,
+                      enabled: !userManager.loading,
                       decoration: const InputDecoration(hintText: 'Eメール'),
                       textInputAction: TextInputAction.next,
-                      // autocorrect: false,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_passFocusNode);
+                      },
+                      autocorrect: false,
                       keyboardType: TextInputType.emailAddress,
-                      // focusNode: _passFocusNode,
+                      focusNode: _emailFocusNode,
                       validator: (email) {
                         if (email.isEmpty) {
                           return '入力必須です';
@@ -72,14 +82,16 @@ class SignUpScreen extends StatelessWidget {
 
                     TextFormField(
                       // controller: passController,
-                      // enabled: !userManager.loading,
+                      enabled: !userManager.loading,
                       decoration: const InputDecoration(hintText: 'パスワード'),
                       textInputAction: TextInputAction.next,
-
-                      // autocorrect: false,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_passComFocusNode);
+                      },
+                      autocorrect: false,
                       obscureText: true,
                       /*入力を隠す*/
-                      // focusNode: _passFocusNode,
+                      focusNode: _passFocusNode,
                       validator: (pass) {
                         if (pass.isEmpty) {
                           return '入力必須です';
@@ -94,11 +106,11 @@ class SignUpScreen extends StatelessWidget {
 
                     TextFormField(
                       // controller: passController,
-                      // enabled: !userManager.loading,
+                      enabled: !userManager.loading,
                       decoration: const InputDecoration(hintText: 'パスワード確認'),
-                      // autocorrect: false,
+                      autocorrect: false,
                       obscureText: true,
-                      // focusNode: _passFocusNode,
+                      focusNode: _passComFocusNode,
                       validator: (pass) {
                         if (pass.isEmpty) {
                           return '入力必須です';
@@ -118,53 +130,54 @@ class SignUpScreen extends StatelessWidget {
                         disabledColor:
                             Theme.of(context).primaryColor.withAlpha(100),
                         textColor: Colors.white,
-                        onPressed: () {
-                          if (formKey.currentState.validate()) {
-                            formKey.currentState.save();
+                        onPressed: userManager.loading
+                            ? null
+                            : () {
+                                if (formKey.currentState.validate()) {
+                                  formKey.currentState.save();
 
-                            if (user.password != user.confirmPassword) {
-                              scaffoldKey.currentState.showSnackBar(
-                                SnackBar(
-                                  content: Text('パスワードが一致しません'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            }
-                            userManager.signUp(
-                              user: user,
-                              onFail: (error) {
-                                scaffoldKey.currentState.showSnackBar(
-                                  SnackBar(
-                                    content: Text(error),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
+                                  if (user.password != user.confirmPassword) {
+                                    scaffoldKey.currentState.showSnackBar(
+                                      SnackBar(
+                                        content: Text('パスワードが一致しません'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  userManager.signUp(
+                                    user: user,
+                                    onFail: (error) {
+                                      scaffoldKey.currentState.showSnackBar(
+                                        SnackBar(
+                                          content: Text(error),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    },
+                                    onSuccess: () {
+                                      Navigator.of(context)
+                                          .pushNamed(BaseScreen.routeName);
+                                    },
+                                  );
+                                }
                               },
-                              onSuccess: () {
-                                user.saveData();
-                              },
-                            );
-                          }
-                        },
-                        child: Text(
+                        child: userManager.loading
+                            ? CircularProgressIndicator(
+                          valueColor:
+                          AlwaysStoppedAnimation(Colors.white),
+                        )
+                            : Text(
                           '登録',
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
                     )
                   ],
-
-                  // child: Align(
-                  //   alignment: Alignment.centerRight,
-                  //   child: FlatButton(
-                  //     onPressed: () {},
-                  //     padding: EdgeInsets.zero,
-                  //     child: const Text('パスワード忘れ'),
-                  //   ),
-                  // ),
                 );
-              })),
+              },
+            ),
+          ),
         ),
       ),
     );

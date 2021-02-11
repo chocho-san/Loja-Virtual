@@ -1,30 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Users{
-  String id;
+class Users {
   String name;
-   String email;
-   String password;
-   String confirmPassword;
+  String id;
+  String email;
+  String password;
+  String confirmPassword;
+
+  Users({this.id, this.name, this.email, this.password});
+
+
+  Users.fromDocument(DocumentSnapshot document) {
+    id =document.id;
+    name = document.data()['name'];
+    email = document.data()['email'];
+  }
 
 
 
-  Users({this.id,this.name,this.email,this.password});
 
-
-
-  DocumentReference get firestoreRef=>
-  FirebaseFirestore.instance.collection('users').doc(id);
-  
-  Future<void> saveData()async{
+/*Firestoreに保存*/
+  Future<void> saveData() async {
     await firestoreRef.set(toMap());
   }
 
-  Map<String,dynamic>toMap(){
-    return{
-      'name':name,
-      'email':email,
+  DocumentReference get firestoreRef =>
+      FirebaseFirestore.instance.collection('users').doc(id);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
     };
   }
-  
 }

@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const routeName = '/login';
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
@@ -23,14 +25,14 @@ class LoginScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           FlatButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(SignUpScreen.routeName);
-              },
+            onPressed: () {
+              Navigator.of(context).pushNamed(SignUpScreen.routeName);
+            },
             textColor: Colors.white,
-              child: Text(
-                'アカウント作成',
-                style: TextStyle(fontSize: 14),
-              ),
+            child: Text(
+              'アカウント作成',
+              style: TextStyle(fontSize: 14),
+            ),
           )
         ],
       ),
@@ -42,13 +44,13 @@ class LoginScreen extends StatelessWidget {
             child: Consumer<UserManager>(
               builder: (_, userManager, child) {
                 return ListView(
-                  padding:  EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   shrinkWrap: true,
                   children: [
                     TextFormField(
                       controller: emailController,
                       enabled: !userManager.loading,
-                      decoration:  InputDecoration(hintText: 'Eメール'),
+                      decoration: InputDecoration(hintText: 'Eメール'),
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       onFieldSubmitted: (_) {
@@ -56,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       autocorrect: false,
                       validator: (email) {
-                       if (!emailValid(email)) {
+                        if (!emailValid(email)) {
                           return 'このEメールは無効です';
                         }
                         return null;
@@ -66,9 +68,10 @@ class LoginScreen extends StatelessWidget {
                     TextFormField(
                       controller: passController,
                       enabled: !userManager.loading,
-                      decoration:  InputDecoration(hintText: 'パスワード'),
+                      decoration: InputDecoration(hintText: 'パスワード'),
                       autocorrect: false,
-                      obscureText: true,/*入力を隠す*/
+                      obscureText: true,
+                      /*入力を隠す*/
                       focusNode: _passFocusNode,
                       validator: (pass) {
                         if (pass.isEmpty || pass.length < 6) {
@@ -85,11 +88,13 @@ class LoginScreen extends StatelessWidget {
                         onPressed: userManager.loading
                             ? null
                             : () {
+                                /*画面popされない！？！？*/
                                 if (formKey.currentState.validate()) {
                                   userManager.signIn(
                                     user: Users(
-                                        email: emailController.text,
-                                        password: passController.text),
+                                      email: emailController.text,
+                                      password: passController.text,
+                                    ),
                                     onFail: (error) {
                                       scaffoldKey.currentState.showSnackBar(
                                         SnackBar(
@@ -99,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                                       );
                                     },
                                     onSuccess: () {
-                                      print('成功');
+                                      Navigator.of(context).pop();
                                     },
                                   );
                                 }

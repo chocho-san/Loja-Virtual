@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loja_virtual/models/user_manager.dart';
+import 'package:loja_virtual/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base_screen.dart';
@@ -25,11 +26,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => UserManager(),
+      lazy: false,
       child: MaterialApp(
         title: 'Loja Virtual',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 4, 125, 141),
+          primaryColor:  Color.fromARGB(255, 4, 125, 141),
           scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
           appBarTheme: const AppBarTheme(
             elevation: 0,
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
         routes: {
           BaseScreen.routeName:(context) => BaseScreen(),
           SignUpScreen.routeName:(context) => SignUpScreen(),
+          LoginScreen.routeName:(context) => LoginScreen(),
         },
       ),
     );

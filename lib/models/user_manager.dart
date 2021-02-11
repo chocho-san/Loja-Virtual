@@ -10,9 +10,10 @@ class UserManager extends ChangeNotifier {
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  User user;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  Users users;
 
+/*ロード中かどうか*/
   bool _loading = false;
 
   //getterとsetter
@@ -24,14 +25,20 @@ class UserManager extends ChangeNotifier {
     _loading = value;
     notifyListeners();
   }
+  /*ログインしてるかどうか*/
+  bool get isLoggedIn => users != null;
 
+  /*ログインする*/
   Future<void> signIn({Users user, Function onFail, Function onSuccess}) async {
     loading = true;
     try {
       final result = await auth.signInWithEmailAndPassword(
-          email: user.email, password: user.password);
+        email: user.email,
+        password: user.password,
+      );
 
-      this.user = result.user;
+      await _loadCurrentUser(firebaseUser: result.user);
+
 
       onSuccess();
     } on FirebaseAuthException catch (error) {
@@ -40,15 +47,19 @@ class UserManager extends ChangeNotifier {
     loading = false;
   }
 
+  /*アカウント登録。authにはemail、pass、idのみ。nameはuser.dart参照*/
   Future<void> signUp({Users user, Function onFail, Function onSuccess}) async {
     loading = true;
     try {
       final result = await auth.createUserWithEmailAndPassword(
-          email: user.email, password: user.password);
+        email: user.email,
+        password: user.password,
+      );
 
       user.id = result.user.uid;
+      this.users = user;
 
-      await user.saveData();
+      await user.saveData();/*Firestoreに保存*/
       onSuccess();
     } on FirebaseAuthException catch (error) {
       onFail(getErrorString(error.code));
@@ -56,12 +67,21 @@ class UserManager extends ChangeNotifier {
     loading = false;
   }
 
-  Future<void> _loadCurrentUser() async {
-    final User currentUser = await auth.currentUser;
+  void signOut(){
+    auth.signOut();
+    users =null;
+    notifyListeners();
+  }
+
+  /*Firestoreからユーザーの情報を取得*/
+  Future<void> _loadCurrentUser({User firebaseUser}) async {
+    final User currentUser = firebaseUser ?? await auth.currentUser;/*authでログイン中のアカウント*/
     if (currentUser != null) {
       final DocumentSnapshot docUser =
-          await firestore.collection('users').doc(currentUser.uid).get();
+          await fireStore.collection('users').doc(currentUser.uid).get();
+      users = Users.fromDocument(docUser);
+      print(users.name);
+      notifyListeners();
     }
-    notifyListeners();
   }
 }

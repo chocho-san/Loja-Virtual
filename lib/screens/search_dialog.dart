@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SearchDialog extends StatelessWidget {
+
+  final String initialText;
+
+  SearchDialog(this.initialText);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -11,7 +16,7 @@ class SearchDialog extends StatelessWidget {
           right: 4,
           child: Card(
             child: TextFormField(
-              // initialValue: initialText,
+              initialValue: initialText,
               textInputAction: TextInputAction.search,/*Enterを虫眼鏡アイコンに*/
               autofocus: true,/*キーボード自動表示*/
               decoration: InputDecoration(

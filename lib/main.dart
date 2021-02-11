@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -24,14 +25,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserManager(),
-      lazy: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserManager(),
+          lazy:
+              false, /*怠惰でない☞プロバイダーが発動されるまで待つのではなく、すぐさま読み込まれる。lazy: trueや省略の時は、値が最初に読み取られたときに呼び出される*/
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductManager(),
+          lazy: false,
+        ),
+      ],
       child: MaterialApp(
         title: 'Loja Virtual',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor:  Color.fromARGB(255, 4, 125, 141),
+          primaryColor: Color.fromARGB(255, 4, 125, 141),
           scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
           appBarTheme: const AppBarTheme(
             elevation: 0,
@@ -40,9 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         home: BaseScreen(),
         routes: {
-          BaseScreen.routeName:(context) => BaseScreen(),
-          SignUpScreen.routeName:(context) => SignUpScreen(),
-          LoginScreen.routeName:(context) => LoginScreen(),
+          BaseScreen.routeName: (context) => BaseScreen(),
+          SignUpScreen.routeName: (context) => SignUpScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
         },
       ),
     );

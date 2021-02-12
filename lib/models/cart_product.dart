@@ -11,7 +11,7 @@ class CartProduct {
 
   CartProduct.fromProduct(this.product) {
     productId = product.id;
-    quantity = 3;
+    quantity = 1;
     size = product.selectedSize.name;
   }
 
@@ -49,6 +49,10 @@ class CartProduct {
       'quantity':quantity,
       'size':size,
     };
+  }
+
+  bool stackable(Product product){/*ある商品がカートに入っているかどうか*/
+    return product.id == productId && product.selectedSize.name==size;
   }
 
 

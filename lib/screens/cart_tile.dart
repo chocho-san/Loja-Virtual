@@ -24,39 +24,46 @@ class CartTile extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  Text(
-                  cartProduct.product.name,
-                  style:
-                  TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    'サイズ: ${cartProduct.size}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
+                    Text(
+                      cartProduct.product.name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        'サイズ: ${cartProduct.size}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      /*cartProduct.product.selectedSize.price.toString()だとカートにM入れた後、もう一度ProductScreenでSサイズを選択しただけで、カートの金額だけ変更されちゃう*/
+                      '¥${cartProduct.unitPrice}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  /*cartProduct.product.selectedSize.price.toString()だとカートにM入れた後、もう一度ProductScreenでSサイズを選択しただけで、カートの金額だけ変更されちゃう*/
-                  '¥${cartProduct.unitPrice}',
-                style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
               ),
+            ),
+            Column(
+              children: [
+                Text(
+                  '${cartProduct.quantity}',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
             ),
           ],
         ),
       ),
-    ),]
-    ,
-    )
-    ,
-    )
-    ,
     );
   }
 }

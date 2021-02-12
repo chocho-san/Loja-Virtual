@@ -37,10 +37,18 @@ class CartManager extends ChangeNotifier {
   }
 
   void addToCart(Product product) {
-    final cartProduct = CartProduct.fromProduct(product);
-    items.add(cartProduct);
-    users.cartRef.add(cartProduct.toCartItemMap());/*ユーザーのFirebase上のカートに追加*/
+    try{
+      final item = items.firstWhere((p) => p.stackable(product));
+      item.quantity++;
+    }catch (e){
 
+
+      final cartProduct = CartProduct.fromProduct(product);
+      items.add(cartProduct);
+      users.cartRef.add(cartProduct.toCartItemMap());/*ユーザーのFirebase上のカートに追加*/
+
+
+    }
 
 
 

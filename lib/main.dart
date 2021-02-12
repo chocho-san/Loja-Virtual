@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
+import 'package:loja_virtual/screens/cart_screen.dart';
 import 'package:loja_virtual/screens/login_screen.dart';
 import 'package:loja_virtual/screens/product_screen.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,12 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductManager(),
           lazy: false,
         ),
+        ChangeNotifierProxyProvider<UserManager, CartManager>(
+          create: (_) => CartManager(),
+          lazy: false,
+          update: (_, userManager, cartManager) =>
+              cartManager..updateUser(userManager),
+        ),
       ],
       child: MaterialApp(
         title: 'Loja Virtual',
@@ -54,8 +62,8 @@ class MyApp extends StatelessWidget {
           BaseScreen.routeName: (context) => BaseScreen(),
           SignUpScreen.routeName: (context) => SignUpScreen(),
           LoginScreen.routeName: (context) => LoginScreen(),
-          ProductScreen.routeName: (context) => ProductScreen(ModalRoute.of(context).settings.arguments),
-
+          ProductScreen.routeName: (context) => ProductScreen(),
+          CartScreen.routeName: (context) => CartScreen(),
         },
       ),
     );

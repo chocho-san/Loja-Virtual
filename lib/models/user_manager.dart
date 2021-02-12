@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/firebase_errors.dart';
 import 'package:loja_virtual/models/user.dart';
 
@@ -51,7 +51,7 @@ class UserManager extends ChangeNotifier {
   Future<void> signUp({Users user, Function onFail, Function onSuccess}) async {
     loading = true;
     try {
-      final result = await auth.createUserWithEmailAndPassword(
+      final result = await auth.createUserWithEmailAndPassword(/*FireAuthに登録*/
         email: user.email,
         password: user.password,
       );

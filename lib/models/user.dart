@@ -19,13 +19,18 @@ class Users {
 
 
 
-/*Firestoreに保存*/
+/*Firestoreにユーザーを保存*/
   Future<void> saveData() async {
     await firestoreRef.set(toMap());
   }
 
   DocumentReference get firestoreRef =>
       FirebaseFirestore.instance.collection('users').doc(id);
+
+
+  /*Firestoreにカート内商品を追加*/
+  CollectionReference get cartRef =>
+      FirebaseFirestore.instance.collection('cart');
 
   Map<String, dynamic> toMap() {
     return {

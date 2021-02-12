@@ -30,7 +30,7 @@ class Users {
 
   /*Firestoreにカート内商品を追加*/
   CollectionReference get cartRef =>
-      FirebaseFirestore.instance.collection('cart');
+      firestoreRef.collection('cart');
 
   Map<String, dynamic> toMap() {
     return {

@@ -17,7 +17,7 @@ class Product extends ChangeNotifier {
     sizes = (document.data()['sizes'] as List<dynamic> ?? [])
         .map((s) => ItemSize.fromMap(s as Map<String, dynamic>))
         .toList();
-    print(sizes);
+    
   }
 
   ItemSize _selectedSize;

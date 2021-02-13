@@ -1,34 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/models/item_size.dart';
 import 'package:loja_virtual/models/product.dart';
 
-class CartProduct {
+class CartProduct with ChangeNotifier{
   String productId;
   int quantity;
   String size;
 
   Product product;
 
+  /* Product get product => _product;
+  set product(Product value){
+    _product = value;
+    notifyListeners();
+  }*/
+
+/*上記のようにget、set追加したらここのproductだけプライベートに変更*/
   CartProduct.fromProduct(this.product) {
     productId = product.id;
     quantity = 1;
     size = product.selectedSize.name;
   }
 
-
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   CartProduct.fromDocument(DocumentSnapshot document) {
     productId = document.data()['pid'] as String;
     quantity = document.data()['quantity'] as int;
     size = document.data()['size'] as String;
 
-    firestore
+    FirebaseFirestore.instance
         .doc('products/$productId')
         .get()
         .then((doc) => product = Product.fromDocument(doc));
   }
-
 
   ItemSize get itemSize {
     if (product == null) return null;
@@ -43,17 +47,27 @@ class CartProduct {
   }
 
   //firebaseに情報渡すときにマップ型必要
-  Map<String,dynamic> toCartItemMap(){
+  Map<String, dynamic> toCartItemMap() {
     return {
-      'pid' :productId,
-      'quantity':quantity,
-      'size':size,
+      'pid': productId,
+      'quantity': quantity,
+      'size': size,
     };
   }
 
-  bool stackable(Product product){/*ある商品がカートに入っているかどうか*/
-    return product.id == productId && product.selectedSize.name==size;
+  bool stackable(Product product) {
+    /*ある商品がカートに入っているかどうか*/
+    return product.id == productId && product.selectedSize.name == size;
   }
 
 
+  void increment() {
+    quantity++;
+    notifyListeners();
+  }
+
+  void decrement() {
+    quantity--;
+    notifyListeners();
+  }
 }

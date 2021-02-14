@@ -64,7 +64,7 @@ class CartTile extends StatelessWidget {
                       CustomIconButton(
                         iconData: Icons.add,
                         color: Theme.of(context).primaryColor,
-                        onTap: cartProduct.increment,
+                        onTap:cartProduct.increment,
                       ),
                       Text(
                         '${cartProduct.quantity}',

@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/models/item_size.dart';
 import 'package:loja_virtual/models/product.dart';
 
-class CartProduct with ChangeNotifier{
+class CartProduct extends ChangeNotifier{
   String productId;
   int quantity;
   String size;
+
+  String id;
 
   Product product;
 
@@ -24,6 +26,7 @@ class CartProduct with ChangeNotifier{
   }
 
   CartProduct.fromDocument(DocumentSnapshot document) {
+    id =document.id;
     productId = document.data()['pid'] as String;
     quantity = document.data()['quantity'] as int;
     size = document.data()['size'] as String;

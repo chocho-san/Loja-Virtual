@@ -3,6 +3,7 @@ import 'package:loja_virtual/common/custom_drawer.dart';
 import 'package:loja_virtual/models/home_manager.dart';
 import 'package:loja_virtual/screens/cart_screen.dart';
 import 'package:loja_virtual/screens/section_list.dart';
+import 'package:loja_virtual/screens/section_staggered.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -54,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                         case 'List':
                           return SectionList(section);
                         case 'Staggered':
-                          return Container();
+                          return SectionStaggered(section);
                         default:
                           return Container();
                       }

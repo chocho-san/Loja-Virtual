@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loja_virtual/models/section.dart';
+import 'package:flutter/material.dart';
 
-class HomeManager {
+
+
+class HomeManager extends ChangeNotifier{
   HomeManager() {
     _loadSections();
   }
@@ -17,10 +20,8 @@ class HomeManager {
         for (final DocumentSnapshot document in snapshot.docs) {
           sections.add(Section.fromDocument(document));
         }
-        print(sections);
+notifyListeners();
       },
     );
-
-    // notifyListeners();
   }
 }

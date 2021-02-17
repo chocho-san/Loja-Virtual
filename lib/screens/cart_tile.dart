@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class CartTile extends StatelessWidget {
   final CartProduct cartProduct;
 
-  const CartTile(this.cartProduct);
+  CartTile(this.cartProduct);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,9 @@ class CartTile extends StatelessWidget {
                       Text(
                         cartProduct.product.name,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 8),
@@ -44,15 +46,28 @@ class CartTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(
-                        /*cartProduct.product.selectedSize.price.toString()だとカートにM入れた後、もう一度ProductScreenでSサイズを選択しただけで、カートの金額だけ変更されちゃう*/
-                        '¥${cartProduct.unitPrice}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      Consumer<CartProduct>(builder: (_, cartProduct, __) {
+                        if (cartProduct.hasStock) {
+                          return Text(
+                            /*cartProduct.product.selectedSize.price.toString()だとカートにM入れた後、もう一度ProductScreenでSサイズを選択しただけで、カートの金額だけ変更されちゃう*/
+
+                            '¥${cartProduct.unitPrice * cartProduct.quantity}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          );
+                        } else {
+                          return Text(
+                            '在庫切れ',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          );
+                        }
+                      }),
                     ],
                   ),
                 ),
@@ -64,7 +79,7 @@ class CartTile extends StatelessWidget {
                       CustomIconButton(
                         iconData: Icons.add,
                         color: Theme.of(context).primaryColor,
-                        onTap:cartProduct.increment,
+                        onTap: cartProduct.increment,
                       ),
                       Text(
                         '${cartProduct.quantity}',

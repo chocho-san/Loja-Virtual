@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
           return MultiProvider(
             providers: [
               ChangeNotifierProvider(
+
                 create: (_) => UserManager(),
                 lazy:
                     false, /*怠惰でない☞プロバイダーが発動されるまで待つのではなく、すぐさま読み込まれる。lazy: trueや省略の時は、値が最初に読み取られたときに呼び出される*/

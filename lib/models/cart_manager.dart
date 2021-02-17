@@ -10,6 +10,8 @@ class CartManager extends ChangeNotifier {
 
   Users users;
 
+  num productsPrice = 0;
+
   void updateUser(UserManager userManager) {
     users = userManager.users;
     items.clear();
@@ -36,20 +38,46 @@ class CartManager extends ChangeNotifier {
       final cartProduct = CartProduct.fromProduct(product);
       cartProduct.addListener(_onItemUpdated);
       items.add(cartProduct);
-      users.cartRef.add(cartProduct.toCartItemMap()).then(
-          (doc) => cartProduct.id = doc.id); /*ユーザーのFirebase上のカートに追加*/
+      users.cartRef
+          .add(cartProduct.toCartItemMap())
+          .then((doc) => cartProduct.id = doc.id); /*ユーザーのFirebase上のカートに追加*/
+      _onItemUpdated();
     }
     notifyListeners();
   }
 
-  void removeOfCart(CartProduct cartProduct){
-    items.removeWhere((p) => p.id == cartProduct.id);
+  void removeOfCart(CartProduct cartProduct) {
+    items.removeWhere((p) => p.id == cartProduct.id); /*CartTile削除*/
     users.cartRef.doc(cartProduct.id).delete();
-    cartProduct.removeListener(_onItemUpdated);
+    cartProduct.removeListener(_onItemUpdated); /*addListener不要になったらこれが必要*/
     notifyListeners();
   }
 
   void _onItemUpdated() {
-    print('update');
+    productsPrice = 0;
+    for (int i = 0; i < items.length; i++) {
+      final cartProduct = items[i];
+      if (cartProduct.quantity == 0) {
+        removeOfCart(cartProduct);
+        i--; /*一個消されたら次の商品のiが繰り下がる*/
+        continue; /*次のcartProductにスキップ*/
+      }
+      productsPrice += cartProduct.totalPrice;
+      _updateCartProduct(cartProduct);
+    }
+
+    notifyListeners();
+  }
+
+  void _updateCartProduct(CartProduct cartProduct) {
+    if (cartProduct.id != null) /*エラー対策？*/
+      users.cartRef.doc(cartProduct.id).update(cartProduct.toCartItemMap());
+  }
+
+  bool get isCartValid {
+    for (final cartProduct in items) {
+      if (!cartProduct.hasStock) return false;
+    }
+    return true;
   }
 }

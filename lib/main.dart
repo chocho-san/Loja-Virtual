@@ -1,14 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/home_manager.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/cart_screen.dart';
+import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login_screen.dart';
-import 'package:loja_virtual/screens/product_screen.dart';
+import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/product/product_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base_screen.dart';
@@ -73,6 +73,8 @@ class MyApp extends StatelessWidget {
                 LoginScreen.routeName: (context) => LoginScreen(),
                 ProductScreen.routeName: (context) => ProductScreen(),
                 CartScreen.routeName: (context) => CartScreen(),
+                EditProductScreen.routeName: (context) => EditProductScreen(),
+
               },
             ),
           );

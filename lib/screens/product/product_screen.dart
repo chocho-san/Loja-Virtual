@@ -5,6 +5,7 @@ import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/cart_screen.dart';
+import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login_screen.dart';
 import 'package:loja_virtual/screens/size_widget.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,23 @@ class ProductScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(product.name),
           centerTitle: true,
+          actions: [
+            Consumer<UserManager>(builder: (_, userManager, __) {
+              if (userManager.adminEnabled) {
+                return IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(
+                      EditProductScreen.routeName,
+                      arguments: product,
+                    );
+                  },
+                );
+              } else {
+                return Container();
+              }
+            }),
+          ],
         ),
         backgroundColor: Colors.white,
         body: ListView(

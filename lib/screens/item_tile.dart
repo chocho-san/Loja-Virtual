@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/section_item.dart';
-import 'package:loja_virtual/screens/product_screen.dart';
+import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/product/product_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 

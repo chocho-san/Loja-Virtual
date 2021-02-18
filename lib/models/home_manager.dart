@@ -17,6 +17,7 @@ class HomeManager extends ChangeNotifier{
         .snapshots() /*.get()とは異なり、リアルタイム更新*/
         .listen(
       (snapshot) {
+        sections.clear();/*一旦クリアしないと同じものが複製されちゃう*/
         for (final DocumentSnapshot document in snapshot.docs) {
           sections.add(Section.fromDocument(document));
         }

@@ -15,6 +15,7 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Product product = ModalRoute.of(context).settings.arguments;
+    //Screen画面なのでbuild下に引数定義
     return ChangeNotifierProvider.value(
       value: product,
       child: Scaffold(

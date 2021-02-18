@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:loja_virtual/models/section.dart';
+import 'package:loja_virtual/screens/item_tile.dart';
 import 'package:loja_virtual/screens/section_header.dart';
 
 class SectionStaggered extends StatelessWidget {
@@ -22,15 +23,12 @@ class SectionStaggered extends StatelessWidget {
             crossAxisCount: 4,
             itemCount: section.items.length,
             itemBuilder: (_, index) {
-              return Image.network(
-                section.items[index].image,
-                fit: BoxFit.cover,
-              );
+              return ItemTile(section.items[index]);
             },
             staggeredTileBuilder: ( index) =>
                 StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
           ),
         ],
       ),

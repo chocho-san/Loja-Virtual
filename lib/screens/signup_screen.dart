@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
-import 'package:loja_virtual/models/user.dart';
+import 'package:loja_virtual/models/users.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/base_screen.dart';
 import 'package:provider/provider.dart';

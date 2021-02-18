@@ -6,6 +6,7 @@ class Users {
   String email;
   String password;
   String confirmPassword;
+  bool admin=false;
 
   Users({this.id, this.name, this.email, this.password});
 

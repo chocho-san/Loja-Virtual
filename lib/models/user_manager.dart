@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/firebase_errors.dart';
-import 'package:loja_virtual/models/user.dart';
+import 'package:loja_virtual/models/users.dart';
 
 class UserManager extends ChangeNotifier {
   UserManager() {
@@ -25,6 +25,7 @@ class UserManager extends ChangeNotifier {
     _loading = value;
     notifyListeners();
   }
+
   /*ログインしてるかどうか*/
   bool get isLoggedIn => users != null;
 
@@ -39,7 +40,6 @@ class UserManager extends ChangeNotifier {
 
       await _loadCurrentUser(firebaseUser: result.user);
 
-
       onSuccess();
     } on FirebaseAuthException catch (error) {
       onFail(getErrorString(error.code));
@@ -51,7 +51,8 @@ class UserManager extends ChangeNotifier {
   Future<void> signUp({Users user, Function onFail, Function onSuccess}) async {
     loading = true;
     try {
-      final result = await auth.createUserWithEmailAndPassword(/*FireAuthに登録*/
+      final result = await auth.createUserWithEmailAndPassword(
+        /*FireAuthに登録*/
         email: user.email,
         password: user.password,
       );
@@ -59,7 +60,7 @@ class UserManager extends ChangeNotifier {
       user.id = result.user.uid;
       this.users = user;
 
-      await user.saveData();/*Firestoreに保存*/
+      await user.saveData(); /*Firestoreに保存*/
       onSuccess();
     } on FirebaseAuthException catch (error) {
       onFail(getErrorString(error.code));
@@ -67,21 +68,33 @@ class UserManager extends ChangeNotifier {
     loading = false;
   }
 
-  void signOut(){
+  void signOut() {
     auth.signOut();
-    users =null;
+    users = null;
     notifyListeners();
   }
 
   /*Firestoreからユーザーの情報を取得*/
   Future<void> _loadCurrentUser({User firebaseUser}) async {
-    final User currentUser = firebaseUser ?? await auth.currentUser;/*authでログイン中のアカウント*/
+    final User currentUser =
+        firebaseUser ?? await auth.currentUser; /*authでログイン中のアカウント*/
     if (currentUser != null) {
       final DocumentSnapshot docUser =
           await fireStore.collection('users').doc(currentUser.uid).get();
       users = Users.fromDocument(docUser);
-      /*print(users.name);*//*現在ログインしてる人*/
+
+      final docAdmin = await FirebaseFirestore.instance
+          .collection('admins')
+          .doc(users.id)
+          .get();
+
+      if (docAdmin.exists) {
+        users.admin = true;
+      }
+
       notifyListeners();
     }
   }
+
+  bool get adminEnabled => users != null && users.admin;
 }

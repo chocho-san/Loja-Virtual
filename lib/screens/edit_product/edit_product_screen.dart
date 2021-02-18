@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product.dart';
+import 'package:loja_virtual/screens/edit_product/images_form.dart';
 
 class EditProductScreen extends StatelessWidget {
   static const routeName = '/edit_product';
@@ -15,7 +16,7 @@ class EditProductScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-
+          ImagesForm(product),
         ],
       ),
     );

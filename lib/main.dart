@@ -7,6 +7,7 @@ import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/cart_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
+import 'package:loja_virtual/screens/home_screen.dart';
 import 'package:loja_virtual/screens/login_screen.dart';
 import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/product/product_screen.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
               ),
               home: BaseScreen(),
               routes: {
+                HomeScreen.id: (context) => HomeScreen(),
                 BaseScreen.routeName: (context) => BaseScreen(),
                 SignUpScreen.routeName: (context) => SignUpScreen(),
                 LoginScreen.routeName: (context) => LoginScreen(),

@@ -7,6 +7,8 @@ import 'package:loja_virtual/screens/section_staggered.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const id = '/Home';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

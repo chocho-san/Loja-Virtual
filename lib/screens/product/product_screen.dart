@@ -80,7 +80,7 @@ class ProductScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '¥800',
+                    '¥${product.basePrice}',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

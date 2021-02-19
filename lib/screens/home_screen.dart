@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/custom_drawer.dart';
 import 'package:loja_virtual/models/home_manager.dart';
-import 'package:loja_virtual/screens/cart_screen.dart';
+import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/section_list.dart';
 import 'package:loja_virtual/screens/section_staggered.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const id = '/Home';
 
   @override
   Widget build(BuildContext context) {

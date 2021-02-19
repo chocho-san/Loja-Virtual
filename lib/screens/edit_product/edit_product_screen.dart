@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/screens/edit_product/images_form.dart';
+import 'package:loja_virtual/screens/edit_product/sizes_form.dart';
 
 class EditProductScreen extends StatelessWidget {
   static const routeName = '/edit_product';
@@ -91,16 +92,8 @@ class EditProductScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16,  ),
-                    child: Text(
-                      'サイズ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+
+                  SizesForm(product),
                   RaisedButton(
                     onPressed: () {
                       // 各Fieldのvalidatorを呼び出す

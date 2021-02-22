@@ -14,8 +14,7 @@ class ImagesForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormField<List<dynamic>>(
-      initialValue: List.from(product.images),
-      /*新しいステータス追加。新しいリストを作成*/
+      initialValue: List.from(product.images), //編集前
 
       validator: (image) {
         // formKey.currentState.validate()でコールされる
@@ -25,6 +24,7 @@ class ImagesForm extends StatelessWidget {
           return null;
         }
       },
+      onSaved: (images)=>product.newImages=images, //追加した画像も含める
       builder: (state) {
         void onImageSelected(File file) {
           state.value.add(file);

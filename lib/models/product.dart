@@ -9,6 +9,15 @@ class Product extends ChangeNotifier {
   List<String> images;
   List<ItemSize> sizes;
 
+  List<dynamic> newImages;
+
+
+//products_screenから製品追加するときnullを避けるため初期値設定する
+  Product({this.id,this.name,this.description,this.images,this.sizes}){
+    images=images??[];
+    sizes =sizes ?? [];
+  }
+
   Product.fromDocument(DocumentSnapshot document) {
     id = document.id;
     name = document.data()['name'] as String;
@@ -56,5 +65,20 @@ class Product extends ChangeNotifier {
     } catch (e) {
       return null;
     }
+  }
+
+  Product clone(){//Productオブジェクトの複製
+    return Product(
+      id: id,
+      name: name,
+      description: description,
+      images: List.from(images),
+      sizes:sizes.map((size) => size.clone()).toList(),
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Product{id: $id, name: $name, description: $description, images: $images, sizes: $sizes, newImages: $newImages}';
   }
 }

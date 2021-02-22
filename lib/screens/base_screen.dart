@@ -4,7 +4,7 @@ import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/admin_users/admin_users_screen.dart';
 import 'package:loja_virtual/screens/home_screen.dart';
-import 'package:loja_virtual/screens/products_screen.dart';
+import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/products/products_screen.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {

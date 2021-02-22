@@ -23,6 +23,12 @@ class EditItemSize extends StatelessWidget {
               labelText: 'サイズ',
               isDense: true,
             ),
+            validator: (name){
+              if(name.isEmpty){
+                return 'サイズを入力してください';
+              }return null;
+            },
+            onChanged: (name) => size.name =name ,
           ),
 
         ),
@@ -36,6 +42,13 @@ class EditItemSize extends StatelessWidget {
               isDense: true,
             ),
             keyboardType: TextInputType.number,
+            validator: (stock){
+              if(int.tryParse(stock)==null){ //整数かどうか
+                return '無効';
+              }return null;
+            },
+            onChanged: (stock) => size.stock =int.tryParse(stock) ,
+
           ),
         ),
         SizedBox(width: 4),
@@ -50,14 +63,21 @@ class EditItemSize extends StatelessWidget {
               prefixText: '¥',
             ),
             keyboardType: TextInputType.number,
+            validator: (price){
+              if(int.tryParse(price)==null){
+                return '無効';
+              }return null;
+            },
+            onChanged: (price) => size.stock =int.tryParse(price) ,
 
           ),
         ),
         CustomIconButton(
-          iconData: Icons.remove,
+          iconData: Icons.delete,
           color: Colors.red,
           onTap: onRemove,
         ),
+
         CustomIconButton(
           iconData: Icons.arrow_drop_up,
           color: Colors.black,

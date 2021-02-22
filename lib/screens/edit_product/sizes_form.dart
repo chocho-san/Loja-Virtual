@@ -12,7 +12,13 @@ class SizesForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormField<List<ItemSize>>(
-      initialValue: List.from(product.sizes), //リスト型
+      initialValue: product.sizes, //リスト型
+      validator: (sizes) {
+        if (sizes.isEmpty) {
+          return 'サイズを入力して下さい';
+        }
+        return null;
+      },
       builder: (state) {
         return Column(
           children: [
@@ -46,21 +52,36 @@ class SizesForm extends StatelessWidget {
                     state.value.remove(size);
                     state.didChange(state.value);
                   },
-                  onMoveUp: size != state.value.first ? (){
-                    final index = state.value.indexOf(size);
-                    state.value.remove(size);
-                    state.value.insert(index-1, size);
-                    state.didChange(state.value);
-                  } : null,
-                  onMoveDown: size != state.value.last ? (){
-                    final index = state.value.indexOf(size);
-                    state.value.remove(size);
-                    state.value.insert(index+1, size);
-                    state.didChange(state.value);
-                  } : null,
+                  onMoveUp: size != state.value.first
+                      ? () {
+                          final index = state.value.indexOf(size);
+                          state.value.remove(size);
+                          state.value.insert(index - 1, size);
+                          state.didChange(state.value);
+                        }
+                      : null,
+                  onMoveDown: size != state.value.last
+                      ? () {
+                          final index = state.value.indexOf(size);
+                          state.value.remove(size);
+                          state.value.insert(index + 1, size);
+                          state.didChange(state.value);
+                        }
+                      : null,
                 );
               }).toList(),
             ),
+            if (state.hasError)
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  state.errorText,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
           ],
         );
       },

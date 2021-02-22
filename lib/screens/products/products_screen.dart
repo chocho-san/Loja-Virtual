@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/custom_drawer.dart';
+import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/product_manager.dart';
+import 'package:loja_virtual/models/user_manager.dart';
+import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/product_list_tile.dart';
 import 'package:loja_virtual/screens/search_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ProductsScreen extends StatelessWidget {
+
+  final Product product = Product();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +50,7 @@ class ProductsScreen extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
+
           Consumer<ProductManager>(
             builder: (_, productManager, __) {
               if (productManager.search.isEmpty) {
@@ -70,6 +76,21 @@ class ProductsScreen extends StatelessWidget {
               }
             },
           ),
+          Consumer<UserManager>(builder: (_, userManager, __) {
+            if (userManager.adminEnabled) {
+              return IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed(
+                    EditProductScreen.routeName,
+                    arguments: product.clone(),
+                  );
+                },
+              );
+            } else {
+              return Container();
+            }
+          }),
         ],
       ),
       body: Consumer<ProductManager>(

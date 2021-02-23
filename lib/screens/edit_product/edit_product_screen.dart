@@ -106,6 +106,7 @@ class EditProductScreen extends StatelessWidget {
                         if (formKey.currentState.validate()) {
                           // 入力データが正常な場合の処理
                           formKey.currentState.save();
+                          product.save();
                         }
                       },
                       child: Text(

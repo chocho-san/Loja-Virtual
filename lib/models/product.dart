@@ -28,6 +28,9 @@ class Product extends ChangeNotifier {
         .toList();
   }
 
+  DocumentReference get firestoreRef => FirebaseFirestore.instance.doc('products/$id');
+
+
   ItemSize _selectedSize;
 
   ItemSize get selectedSize => _selectedSize;
@@ -64,6 +67,26 @@ class Product extends ChangeNotifier {
       return sizes.firstWhere((s) => s.name == name);
     } catch (e) {
       return null;
+    }
+  }
+
+  //Firebese用
+  List<Map<String, dynamic>> exportSizeList(){
+    return sizes.map((size) => size.toMap()).toList();
+  }
+
+  Future<void> save() async {
+    final Map<String, dynamic> data = {
+      'name': name,
+      'description': description,
+      'sizes': exportSizeList(),
+    };
+
+    if(id == null){//新規作成なら
+      final doc = await FirebaseFirestore.instance.collection('products').add(data);
+      id = doc.id;
+    } else {//既存製品なら
+      await firestoreRef.update(data);
     }
   }
 

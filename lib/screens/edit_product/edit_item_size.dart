@@ -68,7 +68,7 @@ class EditItemSize extends StatelessWidget {
                 return '無効';
               }return null;
             },
-            onChanged: (price) => size.stock =int.tryParse(price) ,
+            onChanged: (price) => size.price =int.tryParse(price) ,
 
           ),
         ),

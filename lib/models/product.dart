@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/models/item_size.dart';
+import 'package:uuid/uuid.dart';
 
 class Product extends ChangeNotifier {
   String id;
@@ -11,11 +15,17 @@ class Product extends ChangeNotifier {
 
   List<dynamic> newImages;
 
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
 //products_screenから製品追加するときnullを避けるため初期値設定する
-  Product({this.id,this.name,this.description,this.images,this.sizes}){
-    images=images??[];
-    sizes =sizes ?? [];
+  Product({this.id, this.name, this.description, this.images, this.sizes}) {
+    images = images ?? [];
+    sizes = sizes ?? [];
   }
 
   Product.fromDocument(DocumentSnapshot document) {
@@ -28,8 +38,11 @@ class Product extends ChangeNotifier {
         .toList();
   }
 
-  DocumentReference get firestoreRef => FirebaseFirestore.instance.doc('products/$id');
+  DocumentReference get firestoreRef =>
+      FirebaseFirestore.instance.doc('products/$id');
 
+  Reference get storageRef =>
+      FirebaseStorage.instance.ref().child('products').child(id);
 
   ItemSize _selectedSize;
 
@@ -71,32 +84,68 @@ class Product extends ChangeNotifier {
   }
 
   //Firebese用
-  List<Map<String, dynamic>> exportSizeList(){
+  List<Map<String, dynamic>> exportSizeList() {
     return sizes.map((size) => size.toMap()).toList();
   }
 
+  /*製品の保存*/
   Future<void> save() async {
+    loading =true;
     final Map<String, dynamic> data = {
       'name': name,
       'description': description,
       'sizes': exportSizeList(),
     };
 
-    if(id == null){//新規作成なら
-      final doc = await FirebaseFirestore.instance.collection('products').add(data);
+    if (id == null) {
+      //新規作成なら
+      final doc =
+          await FirebaseFirestore.instance.collection('products').add(data);
       id = doc.id;
-    } else {//既存製品なら
+    } else {
+      //既存製品なら
       await firestoreRef.update(data);
     }
+/*画像リストの保存*/
+    final List<String> updateImages = [];/*新規作成、編集した後の画像リスト*/
+
+    for (final newImage in newImages) {
+      if (images.contains(newImage)) {
+        updateImages.add(newImage as String);
+      } else {
+        final UploadTask task = storageRef
+            .child(Uuid().v1())
+            .putFile(newImage as File); /*Storageに追加*/
+        final String url = await task.snapshot.ref.getDownloadURL();
+        updateImages.add(url);
+      }
+    }
+/*Firebaseから削除*/
+    for (final image in images) {
+      if (!newImages.contains(image)) {
+        try {
+          final ref = await FirebaseStorage.instance.refFromURL(image);
+          await ref.delete();
+        } catch (e) {
+          debugPrint('削除失敗：$image');
+        }
+      }
+    }
+
+    await firestoreRef.update({'images': updateImages});/*画像リストの更新*/
+    images=updateImages;
+    loading=false;
   }
 
-  Product clone(){//Productオブジェクトの複製
+
+  Product clone() {
+    //Productオブジェクトの複製
     return Product(
       id: id,
       name: name,
       description: description,
       images: List.from(images),
-      sizes:sizes.map((size) => size.clone()).toList(),
+      sizes: sizes.map((size) => size.clone()).toList(),
     );
   }
 

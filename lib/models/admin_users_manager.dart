@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/models/users.dart';
 import 'package:loja_virtual/models/user_manager.dart';
@@ -22,7 +21,7 @@ class AdminUsersManager extends ChangeNotifier {
   }
 
   void _listenToUsers() {
-    final faker = Faker(); /*ダミーデータを生成*/
+    // final faker = Faker(); /*ダミーデータを生成*/
 
     _subscription =
         FirebaseFirestore.instance.collection('users').snapshots().listen(

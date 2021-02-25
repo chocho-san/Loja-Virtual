@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/models/item_size.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +16,9 @@ class Product extends ChangeNotifier {
   List<dynamic> newImages;
 
   bool _loading = false;
+
   bool get loading => _loading;
+
   set loading(bool value) {
     _loading = value;
     notifyListeners();
@@ -41,8 +43,8 @@ class Product extends ChangeNotifier {
   DocumentReference get firestoreRef =>
       FirebaseFirestore.instance.doc('products/$id');
 
-  Reference get storageRef =>
-      FirebaseStorage.instance.ref().child('products').child(id);
+  // Reference get storageRef =>
+  //     FirebaseStorage.instance.ref().child('home/$id') ;
 
   ItemSize _selectedSize;
 
@@ -90,7 +92,7 @@ class Product extends ChangeNotifier {
 
   /*製品の保存*/
   Future<void> save() async {
-    loading =true;
+    loading = true;
     final Map<String, dynamic> data = {
       'name': name,
       'description': description,
@@ -107,16 +109,21 @@ class Product extends ChangeNotifier {
       await firestoreRef.update(data);
     }
 /*画像リストの保存*/
-    final List<String> updateImages = [];/*新規作成、編集した後の画像リスト*/
+    final List<String> updateImages = []; /*新規作成、編集した後の画像リスト*/
 
     for (final newImage in newImages) {
       if (images.contains(newImage)) {
+        /*編集前にあった削除されてない画像追加*/
         updateImages.add(newImage as String);
       } else {
-        final UploadTask task = storageRef
+        /*新たに足す画像を追加*/
+        final snapshot = await firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('products/$id')
             .child(Uuid().v1())
-            .putFile(newImage as File); /*Storageに追加*/
-        final String url = await task.snapshot.ref.getDownloadURL();
+            .putFile(newImage as File); /*StorageにFile型で追加*/
+
+        final String url = await snapshot.ref.getDownloadURL();
         updateImages.add(url);
       }
     }
@@ -124,7 +131,8 @@ class Product extends ChangeNotifier {
     for (final image in images) {
       if (!newImages.contains(image)) {
         try {
-          final ref = await FirebaseStorage.instance.refFromURL(image);
+          final ref =
+              await firebase_storage.FirebaseStorage.instance.refFromURL(image);
           await ref.delete();
         } catch (e) {
           debugPrint('削除失敗：$image');
@@ -132,11 +140,12 @@ class Product extends ChangeNotifier {
       }
     }
 
-    await firestoreRef.update({'images': updateImages});/*画像リストの更新*/
-    images=updateImages;
-    loading=false;
-  }
+    await firestoreRef.update({'images': updateImages}); /*画像リストの更新*/
+    images = updateImages;
+    loading = false;
 
+    print(images);
+  }
 
   Product clone() {
     //Productオブジェクトの複製

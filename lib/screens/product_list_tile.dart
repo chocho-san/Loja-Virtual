@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/product/product_screen.dart';
+import 'package:loja_virtual/screens/product/product_screen.dart';
 
 class ProductListTile extends StatelessWidget {
   final Product product;

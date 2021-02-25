@@ -9,6 +9,7 @@ import 'package:loja_virtual/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login/login_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
+import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base_screen.dart';
@@ -70,6 +71,8 @@ class MyApp extends StatelessWidget {
           ProductScreen.routeName: (context) => ProductScreen(),
           CartScreen.routeName: (context) => CartScreen(),
           EditProductScreen.routeName: (context) => EditProductScreen(),
+       SelectProductScreen.routeName: (context) => SelectProductScreen(),
+
         },
       ),
     );

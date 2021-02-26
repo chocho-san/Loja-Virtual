@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/price_card.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/cart/cart_tile.dart';
+import 'package:loja_virtual/screens/address/address_screen.dart';
+import 'package:loja_virtual/screens/cart/cart_tile.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
@@ -25,7 +26,9 @@ class CartScreen extends StatelessWidget {
               ),
               PriceCard(
                 buttonText: '購入',
-                onPressed: cartManager.isCartValid ? () {} : null,
+                onPressed: cartManager.isCartValid ? () {
+                  Navigator.of(context).pushNamed(AddressScreen.routeName);
+                } : null,
               ),
             ],
           );

@@ -1,15 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/models/address.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/home_manager.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
+import 'package:loja_virtual/screens/address/address_screen.dart';
 import 'package:loja_virtual/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login/login_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
+import 'package:loja_virtual/service/postal.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base_screen.dart';
@@ -37,6 +40,14 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => HomeManager(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Postal(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Address(),
           lazy: false,
         ),
         ChangeNotifierProxyProvider<UserManager, CartManager>(
@@ -71,8 +82,8 @@ class MyApp extends StatelessWidget {
           ProductScreen.routeName: (context) => ProductScreen(),
           CartScreen.routeName: (context) => CartScreen(),
           EditProductScreen.routeName: (context) => EditProductScreen(),
-       SelectProductScreen.routeName: (context) => SelectProductScreen(),
-
+          SelectProductScreen.routeName: (context) => SelectProductScreen(),
+          AddressScreen.routeName: (context) => AddressScreen(),
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loja_virtual/models/address.dart';
 
 class Users {
   String name;
@@ -7,6 +8,7 @@ class Users {
   String password;
   String confirmPassword;
   bool admin=false;
+  Address address;
 
   Users({this.id, this.name, this.email, this.password});
 
@@ -39,4 +41,13 @@ class Users {
       'email': email,
     };
   }
+
+  void setAddress(Address address){
+    this.address = address;
+    saveData();
+  }
+
+
+
+
 }

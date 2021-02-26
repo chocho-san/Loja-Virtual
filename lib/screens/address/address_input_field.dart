@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loja_virtual/common/custom_icon_button.dart';
 import 'package:loja_virtual/models/address.dart';
-import 'package:loja_virtual/service/postal.dart';
+import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:provider/provider.dart';
 
 class AddressInputField extends StatelessWidget {
@@ -10,15 +10,20 @@ class AddressInputField extends StatelessWidget {
 
   AddressInputField(this.address);
 
+  final TextEditingController zipController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final postalData = context.watch<Postal>();
+    final cartManager = context.watch<CartManager>();
+
     if (address.postal == null)
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextFormField(
-          onChanged: (text) => postalData.postAddress = text,
+          controller: zipController,
+          onChanged: (text) => cartManager.postAddress = text,
+          initialValue: address.postal,
           decoration: InputDecoration(
               isDense: true, labelText: '郵便番号', hintText: '1234567'),
           keyboardType: TextInputType.number,
@@ -42,20 +47,16 @@ class AddressInputField extends StatelessWidget {
           child: Text('検索'),
           onPressed: () async {
             if (Form.of(context).validate()) {
+              Form.of(context).save();
               try {
                 //郵便番号情報受け取り失敗または入力ミスを通知。
-                await context
-                    .read<Postal>()
-                    .getAddress(postalData.postsAddress);
+                await context.read<CartManager>().getAddress(zipController.text);
               } catch (e) {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: Text('郵便番号を再入力して下さい'),
-                    duration: Duration(seconds: 5),
-                    action: SnackBarAction(
-                      label: '閉じる',
-                      onPressed: () {},
-                    ),
+                    backgroundColor: Colors.red,
+
                   ),
                 );
 
@@ -66,27 +67,30 @@ class AddressInputField extends StatelessWidget {
       ],
     );
     else //情報取得できたら別テキスト。
-      return Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              '〒 ${address.postal}',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 17,
+      return Padding(
+        padding:  EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                '〒 ${address.postal}',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                ),
               ),
             ),
-          ),
-          CustomIconButton(
-            iconData: Icons.edit,
-            color: Theme.of(context).primaryColor,
-            onTap: () {
-              context.read<Postal>().postRemove(); //郵便番号の入力情報を削除。
-              postalData.onSave = false;
-            },
-          )
-        ],
+            CustomIconButton(
+              iconData: Icons.edit,
+              color: Theme.of(context).primaryColor,
+              size: 20,
+              onTap: () {
+                context.read<CartManager>().removeAddress(); //郵便番号をクリア　
+              },
+            )
+          ],
+        ),
       );
   }
 }

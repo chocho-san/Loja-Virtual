@@ -44,6 +44,7 @@ dependencies:
   flutter_reorderable_list: ^0.1.4
   uuid: ^2.2.2
   dio: ^3.0.10
+  geolocator: ^5.3.1
 
 
 

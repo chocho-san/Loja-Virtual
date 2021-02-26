@@ -12,6 +12,10 @@ class PriceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartManager = context.watch<CartManager>();
     final productsPrice=cartManager.productsPrice;
+    final deliveryPrice = cartManager.deliveryPrice;
+    final totalPrice = cartManager.totalPrice;
+
+
 
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -37,14 +41,19 @@ class PriceCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('送料'),
-                Text('¥300'),
+            if(deliveryPrice != null)
+              ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('送料'),
+                    Text('¥${deliveryPrice.toStringAsFixed(0)}'),
+                  ],
+                ),
+                Divider(),
               ],
-            ),
-             Divider(),
+
+
              SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +62,7 @@ class PriceCard extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  '¥ ${productsPrice+300}',
+                  '¥ ${totalPrice}',
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 16,

@@ -4,7 +4,7 @@ import 'package:loja_virtual/models/users.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:provider/provider.dart';
 
-import '../signup_screen.dart';
+import '../signup/signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';

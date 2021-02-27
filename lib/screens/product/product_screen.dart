@@ -7,7 +7,7 @@ import 'package:loja_virtual/models/user_manager.dart';
 import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/login/login_screen.dart';
-import 'package:loja_virtual/screens/size_widget.dart';
+import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/product/size_widget.dart';
 import 'package:provider/provider.dart';
 
 class ProductScreen extends StatelessWidget {

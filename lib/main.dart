@@ -8,6 +8,7 @@ import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/address/address_screen.dart';
 import 'package:loja_virtual/screens/cart/cart_screen.dart';
+import 'package:loja_virtual/screens/checkout/checkout_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login/login_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
@@ -15,7 +16,7 @@ import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base/base_screen.dart';
-import 'screens/signup_screen.dart';
+import 'screens/signup/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
           EditProductScreen.routeName: (context) => EditProductScreen(),
           SelectProductScreen.routeName: (context) => SelectProductScreen(),
           AddressScreen.routeName: (context) => AddressScreen(),
+          CheckoutScreen.routeName: (context) => CheckoutScreen(),
         },
       ),
     );

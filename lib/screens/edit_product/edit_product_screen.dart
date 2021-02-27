@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product.dart';
+import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/screens/edit_product/images_form.dart';
 import 'package:loja_virtual/screens/edit_product/sizes_form.dart';
 import 'package:provider/provider.dart';
@@ -111,6 +112,8 @@ class EditProductScreen extends StatelessWidget {
                                     // 入力データが正常な場合の処理
                                     formKey.currentState.save();
                                     await product.save();
+                                    context.read<ProductManager>()
+                                        .update(product);
                                     Navigator.of(context).pop();
                                   }
                                 }

@@ -3,24 +3,22 @@ import 'package:loja_virtual/common/custom_drawer.dart';
 import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/admin_users/admin_users_screen.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/home/home_screen.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/products/products_screen.dart';
+import 'package:loja_virtual/screens/home/home_screen.dart';
+import 'package:loja_virtual/screens/products/products_screen.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {
   static const routeName = '/base';
 
-  final PageController pageController = PageController();
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) => PageManager(pageController),
-      child: Consumer<UserManager>(
-
+    Provider.of<PageManager>(context).pageControllers = _pageController;
+    return Consumer<UserManager>(
         builder: (_,userManager, __) {
           return PageView(
-            controller: pageController,
+            controller: _pageController,
             physics: NeverScrollableScrollPhysics(),
             children: [
               HomeScreen(),
@@ -50,7 +48,7 @@ class BaseScreen extends StatelessWidget {
             ],
           );
         }
-      ),
+
     );
   }
 }

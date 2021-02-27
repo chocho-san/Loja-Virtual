@@ -17,6 +17,10 @@ class Users {
     id =document.id;
     name = document.data()['name'];
     email = document.data()['email'];
+    if(document.data().containsKey('address')){
+      address = Address.fromMap(
+          document.data()['address'] as Map<String, dynamic>);
+    }
   }
 
 
@@ -39,6 +43,8 @@ class Users {
     return {
       'name': name,
       'email': email,
+      if(address != null)
+        'address':address.toMap(),
     };
   }
 

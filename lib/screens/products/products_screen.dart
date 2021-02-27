@@ -4,9 +4,9 @@ import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/cart/cart_screen.dart';
-import 'package:loja_virtual/screens/product_list_tile.dart';
-import 'package:loja_virtual/screens/search_dialog.dart';
+import 'package:loja_virtual/screens/cart/cart_screen.dart';
+import 'package:loja_virtual/screens/products/product_list_tile.dart';
+import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/products/search_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ProductsScreen extends StatelessWidget {

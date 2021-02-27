@@ -75,6 +75,7 @@ class Product extends ChangeNotifier {
       }
     }
     return lowest;
+
   }
 
   ItemSize findSize(String name) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/price_card.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
-import 'package:loja_virtual/screens/address/address_card.dart';
+import 'package:loja_virtual/screens/address/zipcode_card.dart';
 import 'package:provider/provider.dart';
 
 class AddressScreen extends StatelessWidget {
@@ -19,10 +19,11 @@ class AddressScreen extends StatelessWidget {
           AddressCard(),
           Consumer<CartManager>(
             builder: (_, cartManager, __) {
-              return PriceCard(
-                buttonText: '支払いする',
-                onPressed: cartManager.isAddressValid ? () {} : null,
-              );
+                return PriceCard(
+                  buttonText: '支払いする',
+                  onPressed: cartManager.isAddressValid ? () {} : null,
+                );
+
             },
           ),
         ],

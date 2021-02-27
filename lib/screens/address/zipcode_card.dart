@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/address.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
+import 'package:loja_virtual/screens/address/zipcode_input_field.dart';
 import 'package:loja_virtual/screens/address/address_input_field.dart';
-import 'package:loja_virtual/screens/address/detailed_address_input_field.dart';
 import 'package:provider/provider.dart';
 
 class AddressCard extends StatelessWidget {
@@ -25,12 +25,12 @@ class AddressCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                AddressInputField(address),
+                ZipCodeInputField(address),
                 // if (address.postal != null && !cartManager.townSelectValue)
                   //addressの情報がない場合は非表示。townSelectValue押されたら非表示。
                 // if (cartManager.townSelectValue)
                   if (address.postal != null)
-                    DetailedAddressInputField(address),
+                    AddressInputField(address),
               ],
             ),
           );

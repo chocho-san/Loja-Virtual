@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 
 
-class PageManager {
+class PageManager extends ChangeNotifier{
 
-  final  PageController _pageController;
-  PageManager(this._pageController);
+  PageController _pageController;
+
+  set pageControllers(PageController controller){
+    _pageController =controller;
+  }
+
+
+
+/*
+  PageController _pageController;
+
+  set pageControllers(PageController controller) { //pageController受け取り。
+    _pageController = controller;
+  }*/
 
 
   int page = 0;

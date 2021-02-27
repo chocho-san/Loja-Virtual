@@ -17,21 +17,27 @@ class CartManager extends ChangeNotifier {
 
   int productsPrice = 0;
   double deliveryPrice;
-  int get totalPrice => productsPrice + (deliveryPrice ?? 0);
+
+  int get totalPrice => (productsPrice + (deliveryPrice ?? 0)).round();
 
   bool _loading = false;
+
   bool get loading => _loading;
-  set loading(bool value){
+
+  set loading(bool value) {
     _loading = value;
     notifyListeners();
   }
 
-
   void updateUser(UserManager userManager) {
     users = userManager.users;
+    int productsPrice = 0;
     items.clear();
+    removeAddress();/*前にログインしてた人のアドレス消す*/
+
     if (users != null) {
       _loadCartItems();
+      _loadUserAddress();
     }
   }
 
@@ -39,8 +45,19 @@ class CartManager extends ChangeNotifier {
   Future<void> _loadCartItems() async {
     final QuerySnapshot cartSnap = await users.cartRef.get();
     items = cartSnap.docs
-        .map((d) => CartProduct.fromDocument(d)..addListener(_onItemUpdated))
-        .toList();
+        .map(
+          (d) => CartProduct.fromDocument(d)..addListener(_onItemUpdated),
+        ).toList();
+  }
+
+  //ユーザーのアドレス情報取得
+  Future<void> _loadUserAddress() async {
+    if (users.address != null &&
+        await calculateDelivery(
+            users.address.latitude, users.address.longitude)) {
+      address = users.address;
+      notifyListeners();
+    }
   }
 
   void addToCart(Product product) {
@@ -96,7 +113,7 @@ class CartManager extends ChangeNotifier {
     return true;
   }
 
-  //-------------------Address----------------------------
+  //------------------------Address------------------------------
 
   bool _townSelectValue = false;
 
@@ -107,8 +124,6 @@ class CartManager extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   String _postAddress;
 
   String get postAddress => _postAddress;
@@ -117,9 +132,7 @@ class CartManager extends ChangeNotifier {
     _postAddress = value;
   }
 
-
   bool get isAddressValid => address != null && deliveryPrice != null;
-
 
   Future<void> getAddress(String postalCode) async {
     loading = true;
@@ -144,7 +157,6 @@ class CartManager extends ChangeNotifier {
         longitude: double.parse(addressData.longitude),
       );
       loading = false;
-
     } catch (e) {
       loading = false;
 
@@ -155,14 +167,20 @@ class CartManager extends ChangeNotifier {
   void removeAddress() {
     address = null;
     _townSelectValue = false;
+    deliveryPrice = null;
     notifyListeners();
   }
 
-  Future<void> setAddress(Address address) async{
+  Future<void> setAddress(Address address) async {
+    loading = true;
+
     this.address = address;
-    if(await calculateDelivery(address.latitude, address.longitude)) {
+    if (await calculateDelivery(address.latitude, address.longitude)) {
       users.setAddress(address);
-    }else{
+      loading = false;
+    } else {
+      loading = false;
+
       return Future.error('配達範囲外の住所です');
     }
   }
@@ -181,11 +199,10 @@ class CartManager extends ChangeNotifier {
         await Geolocator().distanceBetween(latStore, longStore, lat, long);
 
     dis /= 1000; /*m からkmへ*/
-    if(dis > maxkm){
+    if (dis > maxkm) {
       return false;
     }
     deliveryPrice = base + dis * km;
     return true;
-
   }
 }

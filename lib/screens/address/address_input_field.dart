@@ -1,96 +1,100 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:loja_virtual/common/custom_icon_button.dart';
 import 'package:loja_virtual/models/address.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:provider/provider.dart';
 
 class AddressInputField extends StatelessWidget {
-  final Address address;
-
   AddressInputField(this.address);
 
-  final TextEditingController zipController = TextEditingController();
+  final Address address;
 
   @override
   Widget build(BuildContext context) {
     final cartManager = context.watch<CartManager>();
 
-    if (address.postal == null)
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TextFormField(
-          controller: zipController,
-          onChanged: (text) => cartManager.postAddress = text,
-          initialValue: address.postal,
-          decoration: InputDecoration(
-              isDense: true, labelText: '郵便番号', hintText: '1234567'),
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly //数字のみ使用可
-          ],
-          validator: (text) {
-            if (text.isEmpty) {
-              return '入力して下さい';
-            } else if (text.length > 7 || text.length < 5) {
-              return '無効な郵便番号';
-            } else {
-              return null;
-            }
-          },
-        ),
-        RaisedButton(
-          color: Theme.of(context).primaryColor,
-          disabledColor: Theme.of(context).primaryColor.withAlpha(100),
-          textColor: Colors.white,
-          child: Text('検索'),
-          onPressed: () async {
-            if (Form.of(context).validate()) {
-              Form.of(context).save();
-              try {
-                //郵便番号情報受け取り失敗または入力ミスを通知。
-                await context.read<CartManager>().getAddress(zipController.text);
-              } catch (e) {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('郵便番号を再入力して下さい'),
-                    backgroundColor: Colors.red,
-
-                  ),
-                );
-
+    if (address.postal != null && cartManager.deliveryPrice == null) //住所入力完了し保存したら別Widget。
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          TextFormField(
+            enabled: !cartManager.loading,
+            initialValue: '${address.prefecture}${address.city}',
+            //選択された住所別に表示。
+            decoration:
+                InputDecoration(labelText: '都道府県市区町村', hintText: '東京都千代田区'),
+            validator: (text) {
+              if (text.isEmpty) {
+                return '入力してください';
+              } else {
+                return null;
               }
-            }
-          },
-        ),
-      ],
-    );
-    else //情報取得できたら別テキスト。
-      return Padding(
-        padding:  EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                '〒 ${address.postal}',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 17,
-                ),
-              ),
+            },
+            // onSaved: (text) => address.allStreetAddress = text,
+          ),
+          TextFormField(
+            enabled: !cartManager.loading,
+
+            initialValue: '${address.town}',
+            //選択された住所別に表示。
+            decoration: InputDecoration(
+              labelText: '番地・建物名',
             ),
-            CustomIconButton(
-              iconData: Icons.edit,
-              color: Theme.of(context).primaryColor,
-              size: 20,
-              onTap: () {
-                context.read<CartManager>().removeAddress(); //郵便番号をクリア　
-              },
-            )
-          ],
-        ),
+            validator: (text) {
+              if (text.isEmpty) {
+                return '入力してください';
+              } else {
+                return null;
+              }
+            },
+            // onSaved: (text) => address.subStreetAddress = text,
+          ),
+          if (cartManager.loading)
+            LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(
+                Theme.of(context).primaryColor,
+              ),
+              backgroundColor: Colors.transparent,
+            ),
+          RaisedButton(
+            color: Theme.of(context).primaryColor,
+            disabledColor: Theme.of(context).primaryColor.withAlpha(100),
+            textColor: Colors.white,
+            child: Text('住所確定'),
+            onPressed: !cartManager.loading ?() async {
+              if (Form.of(context).validate()) {
+                Form.of(context).save(); /*上のonSaved2つを保存*/
+                try {
+                  await context.read<CartManager>().setAddress(address);
+                } catch (e) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('$e'),
+                      /*setAddressのエラーテキスト*/
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            }:null,
+          )
+        ],
       );
+    else if (address.postal != null)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            '${address.prefecture}${address.city}',
+            style: TextStyle(fontSize: 17),
+          ),
+          Text(
+            address.town,
+            style: TextStyle(fontSize: 17),
+          ),
+        ],
+      );
+    else
+      return Container();
   }
 }

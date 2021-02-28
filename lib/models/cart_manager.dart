@@ -31,7 +31,6 @@ class CartManager extends ChangeNotifier {
 
   void updateUser(UserManager userManager) {
     users = userManager.users;
-    int productsPrice = 0;
     items.clear();
     removeAddress();/*前にログインしてた人のアドレス消す*/
 
@@ -82,6 +81,14 @@ class CartManager extends ChangeNotifier {
     items.removeWhere((p) => p.id == cartProduct.id); /*CartTile削除*/
     users.cartRef.doc(cartProduct.id).delete();
     cartProduct.removeListener(_onItemUpdated); /*addListener不要になったらこれが必要*/
+    notifyListeners();
+  }
+
+  void clear(){
+    for(final cartProduct in items){/*Firebase上で消して*/
+      users.cartRef.doc(cartProduct.id).delete();
+    }
+    items.clear();/*デバイス上で消す*/
     notifyListeners();
   }
 

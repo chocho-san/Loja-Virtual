@@ -12,16 +12,16 @@ class CartProduct extends ChangeNotifier {
 
   String id;
 
-  Product product;
+  Product _product;
 
-  /* Product get product => _product;
+   Product get product => _product;
   set product(Product value){
     _product = value;
     notifyListeners();
-  }*/
+  }
 
 /*上記のようにget、set追加したらここのproductだけプライベートに変更*/
-  CartProduct.fromProduct(this.product) {
+  CartProduct.fromProduct(this._product) {
     productId = product.id;
     quantity = 1;
     size = product.selectedSize.name;
@@ -58,6 +58,14 @@ class CartProduct extends ChangeNotifier {
 
   //firebaseに情報渡すときにマップ型必要
   Map<String, dynamic> toCartItemMap() {
+    return {
+      'pid': productId,
+      'quantity': quantity,
+      'size': size,
+    };
+  }
+
+  Map<String, dynamic> toOrderItemMap() {
     return {
       'pid': productId,
       'quantity': quantity,

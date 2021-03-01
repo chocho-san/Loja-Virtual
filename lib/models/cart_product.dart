@@ -14,6 +14,8 @@ class CartProduct extends ChangeNotifier {
 
   Product _product;
 
+  num fixedPrice;
+
    Product get product => _product;
   set product(Product value){
     _product = value;
@@ -70,6 +72,7 @@ class CartProduct extends ChangeNotifier {
       'pid': productId,
       'quantity': quantity,
       'size': size,
+      'fixedPrice':fixedPrice?? unitPrice,/*製品価格変更されてもオーダー時点の価格変更されない*/
     };
   }
 

@@ -19,12 +19,12 @@ class CheckoutManager extends ChangeNotifier {
   }
 
   Future<void> checkout({Function onStockFail,Function onSuccess}) async {
-    _loading=true;
+    loading=true;
     try {
       await _decrementStock();
     } catch (e) {
       onStockFail(e);
-      _loading=false;
+      loading=false;
       return;
     }
     final orderId = await _getOrderId();
@@ -37,7 +37,7 @@ class CheckoutManager extends ChangeNotifier {
     cartManager.clear();
 
     onSuccess(order);
-    _loading=false;
+    loading=false;
 
 
   }

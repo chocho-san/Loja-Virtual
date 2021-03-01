@@ -66,10 +66,7 @@ class CheckoutScreen extends StatelessWidget {
                             );
                           },
                           onSuccess: (order) {
-                          Navigator.popUntil(
-                            context,
-                            ModalRoute.withName(BaseScreen.routeName),
-                          );
+                            Navigator.of(context).popUntil((route) => route.isFirst);
                         },
                         );
                       }

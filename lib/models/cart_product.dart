@@ -42,6 +42,19 @@ class CartProduct extends ChangeNotifier {
     );
   }
 
+  CartProduct.fromMap(Map<String, dynamic> map){/*注文履歴呼び出し用*/
+    productId = map['pid'] as String;
+    quantity = map['quantity'] as int;
+    size = map['size'] as String;
+    fixedPrice = map['fixedPrice'] as int;
+
+    FirebaseFirestore.instance.doc('products/$productId').get().then(
+            (doc) {
+          product = Product.fromDocument(doc);
+        }
+    );
+  }
+
   ItemSize get itemSize {
     if (product == null) return null;
     /*製品情報取得してから*/

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/home_manager.dart';
+import 'package:loja_virtual/models/orders_manager.dart';
 import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/address/address_screen.dart';
 import 'package:loja_virtual/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/checkout/checkout_screen.dart';
+import 'package:loja_virtual/screens/confirmation/confirmation_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login/login_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
@@ -57,6 +59,12 @@ class MyApp extends StatelessWidget {
           update: (_, userManager, adminUsersManager) =>
               adminUsersManager..updateUser(userManager),
         ),
+        ChangeNotifierProxyProvider<UserManager, OrdersManager>(
+          create: (_) => OrdersManager(),
+          lazy: false,
+          update: (_, userManager, ordersManager) =>
+          ordersManager..updateUser(userManager.users),
+        ),
       ],
       child: MaterialApp(
         title: 'Loja Virtual',
@@ -80,6 +88,7 @@ class MyApp extends StatelessWidget {
           SelectProductScreen.routeName: (context) => SelectProductScreen(),
           AddressScreen.routeName: (context) => AddressScreen(),
           CheckoutScreen.routeName: (context) => CheckoutScreen(),
+          ConfirmationScreen.routeName: (context) => ConfirmationScreen(),
         },
       ),
     );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/price_card.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/checkout_manager.dart';
-import 'package:loja_virtual/screens/base/base_screen.dart';
-import 'package:loja_virtual/screens/cart/cart_screen.dart';
+import 'package:loja_virtual/screens/confirmation/confirmation_screen.dart';
+
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,7 @@ class CheckoutScreen extends StatelessWidget {
     return ChangeNotifierProxyProvider<CartManager, CheckoutManager>(
       create: (_) => CheckoutManager(),
       update: (_, cartManager, checkoutManager) =>
-      checkoutManager..updateCart(cartManager),
+          checkoutManager..updateCart(cartManager),
       lazy: false,
       child: Scaffold(
         appBar: AppBar(
@@ -67,7 +67,8 @@ class CheckoutScreen extends StatelessWidget {
                           },
                           onSuccess: (order) {
                             Navigator.of(context).popUntil((route) => route.isFirst);
-                        },
+                            Navigator.of(context).pushNamed(ConfirmationScreen.routeName,arguments: order);
+                          },
                         );
                       }
                     },

@@ -96,5 +96,5 @@ class UserManager extends ChangeNotifier {
     }
   }
 
-  bool get adminEnabled => users != null && users.admin;
+  bool get adminEnabled => users != null && users.admin; /*ユーザーが管理者かどうか*/
 }

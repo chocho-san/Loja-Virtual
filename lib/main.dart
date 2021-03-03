@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/models/admin_order_manager.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/home_manager.dart';
@@ -53,17 +54,23 @@ class MyApp extends StatelessWidget {
           update: (_, userManager, cartManager) =>
               cartManager..updateUser(userManager),
         ),
-        ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
-          create: (_) => AdminUsersManager(),
-          lazy: false,
-          update: (_, userManager, adminUsersManager) =>
-              adminUsersManager..updateUser(userManager),
-        ),
         ChangeNotifierProxyProvider<UserManager, OrdersManager>(
           create: (_) => OrdersManager(),
           lazy: false,
           update: (_, userManager, ordersManager) =>
           ordersManager..updateUser(userManager.users),
+        ),
+        ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
+          create: (_) => AdminUsersManager(),
+          lazy: false,
+          update: (_, userManager, adminUsersManager) =>
+          adminUsersManager..updateUser(userManager),
+        ),
+        ChangeNotifierProxyProvider<UserManager, AdminOrderManager>(
+          create: (_) => AdminOrderManager(),
+          lazy: false,
+          update: (_, userManager, adminOrderManager) =>
+          adminOrderManager..updateAdmin(adminEnabled: userManager.adminEnabled),
         ),
       ],
       child: MaterialApp(

@@ -34,7 +34,7 @@ class OrdersManager extends ChangeNotifier {
             /*ordersリスト内のuserId*/
             isEqualTo: users.id)
         .snapshots().listen((event) {
-         /* orders.clear();*//*ordersリストに変更があるたびにクリア*/
+          orders.clear();/*ordersリストに変更があるたびにクリア*/
           for(final doc in event.docs){
             orders.add(Order.fromDocument(doc));
           }

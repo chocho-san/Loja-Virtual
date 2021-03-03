@@ -1,7 +1,9 @@
 import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/custom_drawer.dart';
+import 'package:loja_virtual/models/admin_order_manager.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
+import 'package:loja_virtual/models/page_manager.dart';
 import 'package:provider/provider.dart';
 
 class AdminUsersScreen extends StatelessWidget {
@@ -28,6 +30,12 @@ class AdminUsersScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
+              onTap: () {
+                context
+                    .read<AdminOrderManager>()
+                    .setUserFilter(adminUsersManager.users[index]);/*タップした管理者の情報を読み取る*/
+                context.read<PageManager>().setPage(5);/*AdminOrdersScreenに移動*/
+              },
             );
           },
           highlightTextStyle: TextStyle(color: Colors.white, fontSize: 20),

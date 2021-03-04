@@ -35,8 +35,10 @@ class ProductManager extends ChangeNotifier {
   }
 
   Future<void> _loadAllProducts() async {
-    final QuerySnapshot snapProducts =
-        await FirebaseFirestore.instance.collection('products').get();
+    final QuerySnapshot snapProducts = await FirebaseFirestore.instance
+        .collection('products')
+        .where('deleted', isEqualTo: false) //deletedがtrueの時は呼び出さない。
+        .get();
 
     allProducts =
         snapProducts.docs.map((d) => Product.fromDocument(d)).toList();
@@ -44,17 +46,23 @@ class ProductManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Product findProductById(String id){
+  Product findProductById(String id) {
     try {
       return allProducts.firstWhere((p) => p.id == id);
-    } catch (e){
+    } catch (e) {
       return null;
     }
   }
 
-  void update(Product product){
+  void update(Product product) {
     allProducts.removeWhere((p) => p.id == product.id);
     allProducts.add(product);
+    notifyListeners();
+  }
+
+  void delete(Product product) {
+    product.delete();
+    allProducts.removeWhere((p) => p.id == product.id);
     notifyListeners();
   }
 }

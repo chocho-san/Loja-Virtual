@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loja_virtual/models/admin_order_manager.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
@@ -23,6 +24,9 @@ import 'screens/signup/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,//画面を縦に固定
+  ]);
   await Firebase.initializeApp();
   runApp(MyApp());
 }

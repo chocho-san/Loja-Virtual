@@ -80,7 +80,10 @@ class Section with ChangeNotifier {
     }
 
     for (final original in originalItems) {
-      if (!items.contains(original)) {
+      if (!items.contains(original) &&
+          (original.image as String).contains('firebase')) {
+        //画像urlに'firebase'が含まれているならstorageから削除
+        //もしgoogleからの画像とかなら以下の操作はせず、デバイス上だけで削除
         try {
           final ref = await firebase_storage.FirebaseStorage.instance
               .refFromURL(original.image as String);
@@ -99,12 +102,17 @@ class Section with ChangeNotifier {
   Future<void> delete() async {
     await firestoreRef.delete();
     for (final item in items) {
-      try {
-        final ref = await firebase_storage.FirebaseStorage.instance
-            .refFromURL(item.image as String);
-        await ref.delete();
-        // ignore: empty_catches
-      } catch (e) {}
+      if((item.image as String).contains('firebase')){
+        //画像urlに'firebase'が含まれているならstorageから削除
+        //もしgoogleからの画像とかなら以下の操作はせず、デバイス上だけで削除
+        try {
+          final ref = await firebase_storage.FirebaseStorage.instance
+              .refFromURL(item.image as String);
+          await ref.delete();
+          // ignore: empty_catches
+        } catch (e) {}
+      }
+
     }
   }
 

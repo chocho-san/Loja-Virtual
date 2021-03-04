@@ -20,7 +20,7 @@ class ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeManager = context.watch<HomeManager>();
     return GestureDetector(
-      onTap: () {
+      onTap: () {  /*ワンタップ*/
         if (item.product != null) {
           final product =
               context.read<ProductManager>().findProductById(item.product);
@@ -30,7 +30,7 @@ class ItemTile extends StatelessWidget {
           }
         }
       },
-      onLongPress: homeManager.editing?(){
+      onLongPress: homeManager.editing?(){  /*長押し*/
         showDialog(
             context: context,
             builder: (_){

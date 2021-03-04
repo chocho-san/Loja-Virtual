@@ -25,11 +25,11 @@ class ProductScreen extends StatelessWidget {
           centerTitle: true,
           actions: [
             Consumer<UserManager>(builder: (_, userManager, __) {
-              if (userManager.adminEnabled) {
+              if (userManager.adminEnabled&& !product.deleted) {
                 return IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(
+                    Navigator.of(context).pushNamed(
                       EditProductScreen.routeName,
                       arguments: product,
                     );
@@ -103,25 +103,39 @@ class ProductScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16, bottom: 8),
-                    child: Text(
-                      'サイズ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                  if (product.deleted)
+                    Padding(
+                      padding: EdgeInsets.only(top: 16, bottom: 8),
+                      child: Text(
+                        '販売終了されました',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red,
+                        ),
+                      ),
+                    )
+                  else ...[
+                    Padding(
+                      padding: EdgeInsets.only(top: 16, bottom: 8),
+                      child: Text(
+                        'サイズ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 8,
-                    children: product.sizes.map((s) {
-                      return SizeWidget(
-                        size: s,
-                      );
-                    }).toList(),
-                  ),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 8,
+                      children: product.sizes.map((s) {
+                        return SizeWidget(
+                          size: s,
+                        );
+                      }).toList(),
+                    ),
+                  ],
                   SizedBox(height: 20),
                   if (product.hasStock)
                     Consumer2<UserManager, Product>(

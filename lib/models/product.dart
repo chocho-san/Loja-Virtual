@@ -12,6 +12,7 @@ class Product extends ChangeNotifier {
   String description;
   List<String> images;
   List<ItemSize> sizes;
+  bool deleted;
 
   List<dynamic> newImages;
 
@@ -25,7 +26,7 @@ class Product extends ChangeNotifier {
   }
 
 //products_screenから製品追加するときnullを避けるため初期値設定する
-  Product({this.id, this.name, this.description, this.images, this.sizes}) {
+  Product({this.id, this.name, this.description, this.images, this.sizes,this.deleted=false}) {
     images = images ?? [];
     sizes = sizes ?? [];
   }
@@ -38,6 +39,7 @@ class Product extends ChangeNotifier {
     sizes = (document.data()['sizes'] as List<dynamic> ?? [])
         .map((s) => ItemSize.fromMap(s as Map<String, dynamic>))
         .toList();
+    deleted= (document.data()['deleted'] ?? false) as bool; /*nullの場合false*/
   }
 
   DocumentReference get firestoreRef =>
@@ -64,13 +66,13 @@ class Product extends ChangeNotifier {
   }
 
   bool get hasStock {
-    return totalStock > 0;
+    return totalStock > 0 && !deleted;/*在庫数があり、削除されてないか*/
   }
 
   num get basePrice {
     num lowest = double.infinity; //初期値は∞
     for (final size in sizes) {
-      if (size.price < lowest && size.hasStock) {
+      if (size.price < lowest) {
         lowest = size.price;
       }
     }
@@ -98,6 +100,7 @@ class Product extends ChangeNotifier {
       'name': name,
       'description': description,
       'sizes': exportSizeList(),
+      'deleted': deleted,
     };
 
     if (id == null) {
@@ -130,7 +133,9 @@ class Product extends ChangeNotifier {
     }
 /*Firebaseから削除*/
     for (final image in images) {
-      if (!newImages.contains(image)) {
+      if (!newImages.contains(image)&& image.contains('firebase')) {
+        //image URLに'firebase'含まれていない場合は以下の操作する必要なし
+        //単にデバイス上で削除されるだけ
         try {
           final ref =
               await firebase_storage.FirebaseStorage.instance.refFromURL(image);
@@ -148,6 +153,12 @@ class Product extends ChangeNotifier {
     print(images);
   }
 
+  void delete(){
+    firestoreRef.update({'deleted': true});
+  }
+
+
+
   Product clone() {
     //Productオブジェクトの複製
     return Product(
@@ -156,8 +167,11 @@ class Product extends ChangeNotifier {
       description: description,
       images: List.from(images),
       sizes: sizes.map((size) => size.clone()).toList(),
+      deleted: deleted,
     );
   }
+
+
 
   @override
   String toString() {

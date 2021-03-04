@@ -3,6 +3,7 @@ import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/screens/edit_product/images_form.dart';
 import 'package:loja_virtual/screens/edit_product/sizes_form.dart';
+import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatelessWidget {
@@ -21,6 +22,16 @@ class EditProductScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text((product.name != null) ? '編集' : '新規作成'),
           centerTitle: true,
+          actions: [
+            if (product.name != null)
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  context.read<ProductManager>().delete(product);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+              ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: Form(
@@ -89,7 +100,6 @@ class EditProductScreen extends StatelessWidget {
                         hintText: '詳細',
                         border: InputBorder.none,
                       ),
-                      maxLines: null,
                       validator: (desc) {
                         if (desc.isEmpty) {
                           return '詳細が未入力です';
@@ -106,13 +116,14 @@ class EditProductScreen extends StatelessWidget {
                         height: 44,
                         child: RaisedButton(
                           onPressed: !product.loading
-                              ? () async{
+                              ? () async {
                                   // 各Fieldのvalidatorを呼び出す
                                   if (formKey.currentState.validate()) {
                                     // 入力データが正常な場合の処理
                                     formKey.currentState.save();
                                     await product.save();
-                                    context.read<ProductManager>()
+                                    context
+                                        .read<ProductManager>()
                                         .update(product);
                                     Navigator.of(context).pop();
                                   }
@@ -120,8 +131,9 @@ class EditProductScreen extends StatelessWidget {
                               : null,
                           child: product.loading
                               ? CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(Colors.white),
-                          )
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white),
+                                )
                               : Text(
                                   '保存',
                                   style: TextStyle(

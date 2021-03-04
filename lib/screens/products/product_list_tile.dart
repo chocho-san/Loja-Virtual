@@ -14,6 +14,7 @@ class ProductListTile extends StatelessWidget {
         Navigator.of(context).pushNamed(ProductScreen.routeName,arguments: product);
       },
       child: Card(
+        margin: EdgeInsets.symmetric(horizontal: 16,vertical: 4,),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -54,6 +55,17 @@ class ProductListTile extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
+                    if(!product.hasStock)
+                      Padding(
+                        padding: EdgeInsets.only(top: 4),
+                        child: Text(
+                          '在庫切れ',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.red,
+                          ),
+                        ),
+                      )
                   ],
                 ),
               ),

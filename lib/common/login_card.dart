@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/screens/login/login_screen.dart';
+import 'package:loja_virtual/screens/signin/signin_screen.dart';
 
 class LoginCard extends StatelessWidget {
   @override
@@ -32,7 +32,7 @@ class LoginCard extends StatelessWidget {
               ),
               RaisedButton(
                 onPressed: (){
-                  Navigator.of(context).pushNamed(LoginScreen.routeName);
+                  Navigator.of(context).pushNamed(SignInScreen.routeName);
                 },
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,

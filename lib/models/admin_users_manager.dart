@@ -21,8 +21,6 @@ class AdminUsersManager extends ChangeNotifier {
   }
 
   void _listenToUsers() {
-    // final faker = Faker(); /*ダミーデータを生成*/
-
     _subscription =
         FirebaseFirestore.instance.collection('users').snapshots().listen(
       /*.get().then( とは違いリアルタイム更新できる*/

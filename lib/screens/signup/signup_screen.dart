@@ -123,54 +123,52 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     // child,
                     SizedBox(height: 16),
-                    SizedBox(
-                      height: 44,
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColor,
-                        disabledColor:
-                            Theme.of(context).primaryColor.withAlpha(100),
-                        textColor: Colors.white,
-                        onPressed: userManager.loading
-                            ? null
-                            : () {
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
+                    RaisedButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      color: Theme.of(context).primaryColor,
+                      disabledColor:
+                          Theme.of(context).primaryColor.withAlpha(100),
+                      textColor: Colors.white,
+                      onPressed: userManager.loading
+                          ? null
+                          : () {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
 
-                                  if (user.password != user.confirmPassword) {
+                                if (user.password != user.confirmPassword) {
+                                  scaffoldKey.currentState.showSnackBar(
+                                    SnackBar(
+                                      content: Text('パスワードが一致しません'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                userManager.signUp(
+                                  user: user,
+                                  onFail: (error) {
                                     scaffoldKey.currentState.showSnackBar(
                                       SnackBar(
-                                        content: Text('パスワードが一致しません'),
+                                        content: Text(error),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
-                                    return;
-                                  }
-                                  userManager.signUp(
-                                    user: user,
-                                    onFail: (error) {
-                                      scaffoldKey.currentState.showSnackBar(
-                                        SnackBar(
-                                          content: Text(error),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    },
-                                    onSuccess: () {
-                                      Navigator.of(context)
-                                          .pushNamed(BaseScreen.routeName);
-                                    },
-                                  );
-                                }
-                              },
-                        child: userManager.loading
-                            ? CircularProgressIndicator(
-                          valueColor:
-                          AlwaysStoppedAnimation(Colors.white),
-                        )
-                            : Text(
-                          '登録',
-                          style: TextStyle(fontSize: 18),
-                        ),
+                                  },
+                                  onSuccess: () {
+                                    Navigator.of(context)
+                                        .pushNamed(BaseScreen.routeName);
+                                  },
+                                );
+                              }
+                            },
+                      child: userManager.loading
+                          ? CircularProgressIndicator(
+                        valueColor:
+                        AlwaysStoppedAnimation(Colors.white),
+                      )
+                          : Text(
+                        '登録',
+                        style: TextStyle(fontSize: 15),
                       ),
                     )
                   ],

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/user_manager.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/cart/cart_screen.dart';
+import 'package:loja_virtual/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/login/login_screen.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/product/size_widget.dart';
+import 'package:loja_virtual/screens/product/size_widget.dart';
+import 'package:loja_virtual/screens/signin/signin_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -154,7 +154,7 @@ class ProductScreen extends StatelessWidget {
                                           .pushNamed(CartScreen.routeName);
                                     } else {
                                       Navigator.of(context)
-                                          .pushNamed(LoginScreen.routeName);
+                                          .pushNamed(SignInScreen.routeName);
                                     }
                                   }
                                 : null,

@@ -7,6 +7,7 @@ import 'package:loja_virtual/screens/admin_users/admin_users_screen.dart';
 import 'package:loja_virtual/screens/home/home_screen.dart';
 import 'package:loja_virtual/screens/orders/orders_screen.dart';
 import 'package:loja_virtual/screens/products/products_screen.dart';
+import 'package:loja_virtual/screens/stores/stores_screen.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -26,12 +27,7 @@ class BaseScreen extends StatelessWidget {
               HomeScreen(),
               ProductsScreen(),
               OrdersScreen(),
-              Scaffold(
-                drawer: CustomDrawer(),
-                appBar: AppBar(
-                  title: Text('Location'),
-                ),
-              ),
+              StoresScreen(),
               if(userManager.adminEnabled)
                 ...[/*[ A,B, ...[C,D]] ==[A,B,C,D]　マップも同じ*/
                   AdminUsersScreen(),

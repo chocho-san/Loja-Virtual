@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
-import 'file:///C:/Users/marur/AndroidStudioProjects/loja_virtual/lib/screens/login/login_screen.dart';
+import 'package:loja_virtual/screens/signin/signin_screen.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
@@ -38,7 +38,7 @@ class CustomDrawerHeader extends StatelessWidget {
                     context.read<PageManager>().setPage(0);/*ログアウトした後ホーム画面へ*/
                     userManager.signOut();
                   } else {
-                    Navigator.of(context).pushNamed(LoginScreen.routeName);
+                    Navigator.of(context).pushNamed(SignInScreen.routeName);
                   }
                 },
                 child: Text(

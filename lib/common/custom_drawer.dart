@@ -27,22 +27,22 @@ class CustomDrawer extends StatelessWidget {
               CustomDrawerHeader(),
               DrawerTile(
                 iconData: Icons.home,
-                title: 'Home',
+                title: 'トップ',
                 page: 0,
               ),
               DrawerTile(
                 iconData: Icons.list,
-                title: 'Products',
+                title: '商品一覧',
                 page: 1,
               ),
               DrawerTile(
                 iconData: Icons.playlist_add_check,
-                title: 'My Orders',
+                title: '注文履歴',
                 page: 2,
               ),
               DrawerTile(
                 iconData: Icons.location_on,
-                title: 'Location',
+                title: '店舗',
                 page: 3,
               ),
               Consumer<UserManager>(builder: (_, userManager, __) {
@@ -51,12 +51,12 @@ class CustomDrawer extends StatelessWidget {
                     children: [
                       DrawerTile(
                         iconData: Icons.settings,
-                        title: 'Users',
+                        title: 'ユーザー管理',
                         page: 4,
                       ),
                       DrawerTile(
                         iconData: Icons.settings,
-                        title: 'Orders',
+                        title: '注文管理　',
                         page: 5,
                       ),
                     ],

@@ -12,7 +12,7 @@ class AddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('配達'),
+        title: Text('確認'),
         centerTitle: true,
       ),
       body: ListView(

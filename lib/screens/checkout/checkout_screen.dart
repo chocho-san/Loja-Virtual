@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/common/price_card.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/checkout_manager.dart';
+import 'package:loja_virtual/screens/checkout/credit_card_widget.dart';
 import 'package:loja_virtual/screens/confirmation/confirmation_screen.dart';
 
 import 'package:loja_virtual/screens/product/product_screen.dart';
@@ -52,10 +53,13 @@ class CheckoutScreen extends StatelessWidget {
               key: formKey,
               child: ListView(
                 children: <Widget>[
+                  CreditCardWidget(),
                   PriceCard(
                     buttonText: '注文を確定する',
                     onPressed: () {
+                      print('tapped');
                       if (formKey.currentState.validate()) {
+                        print('OK');
                         checkoutManager.checkout(
                           onStockFail: (e) {
                             /*在庫切れなどの場合*/

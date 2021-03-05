@@ -120,7 +120,7 @@ class Product extends ChangeNotifier {
         /*編集前にあった削除されてない画像追加*/
         updateImages.add(newImage as String);
       } else {
-        /*新たに足す画像を追加*/
+        /*新たに足す画像をstorageに追加*/
         final snapshot = await firebase_storage.FirebaseStorage.instance
             .ref()
             .child('products/$id')

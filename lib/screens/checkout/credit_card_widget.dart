@@ -7,6 +7,10 @@ class CreditCardWidget extends StatelessWidget {
 
   final GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
+  final FocusNode numberFocus = FocusNode();
+  final FocusNode dateFocus = FocusNode();
+  final FocusNode nameFocus = FocusNode();
+  final FocusNode cvvFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +21,18 @@ class CreditCardWidget extends StatelessWidget {
         children: [
           FlipCard(
             key: cardKey,
-            front: CardFront(),
-            back: CardBack(),
-            direction: FlipDirection.HORIZONTAL,
-            speed: 700,
-            flipOnTouch: false,
+            front: CardFront(
+              numberFocus: numberFocus,
+              dateFocus: dateFocus,
+              nameFocus: nameFocus,
+              finished: (){/*front書き終えたら自動的に裏面へ*/
+                cardKey.currentState.toggleCard();
+                cvvFocus.requestFocus();
+              },
+            ),
+            back: CardBack(
+              cvvFocus: cvvFocus,
+            ),
           ),
           FlatButton(
             child: Text('反対面'),

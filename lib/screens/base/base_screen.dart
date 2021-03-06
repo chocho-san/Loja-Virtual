@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/common/custom_drawer.dart';
 import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/admin_orders/admin_orders_screen.dart';

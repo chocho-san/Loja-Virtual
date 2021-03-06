@@ -3,7 +3,6 @@ import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/screens/edit_product/images_form.dart';
 import 'package:loja_virtual/screens/edit_product/sizes_form.dart';
-import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatelessWidget {

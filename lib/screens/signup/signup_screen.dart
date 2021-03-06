@@ -10,11 +10,10 @@ class SignUpScreen extends StatelessWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final _nameFocusNode = FocusNode();
-  final _emailFocusNode = FocusNode();
-  final _passFocusNode = FocusNode();
-  final _passComFocusNode = FocusNode();
-
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passFocusNode = FocusNode();
+  final FocusNode _passComFocusNode = FocusNode();
 
   final Users user = Users();
 
@@ -34,7 +33,7 @@ class SignUpScreen extends StatelessWidget {
             child: Consumer<UserManager>(
               builder: (_, userManager, __) {
                 return ListView(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   shrinkWrap: true,
                   children: [
                     TextFormField(
@@ -42,7 +41,7 @@ class SignUpScreen extends StatelessWidget {
                       enabled: !userManager.loading,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_emailFocusNode);
+                        _emailFocusNode.requestFocus();
                       },
                       focusNode: _nameFocusNode,
                       autocorrect: false,
@@ -63,7 +62,7 @@ class SignUpScreen extends StatelessWidget {
                       decoration: const InputDecoration(hintText: 'Eメール'),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_passFocusNode);
+                        _passFocusNode.requestFocus();
                       },
                       autocorrect: false,
                       keyboardType: TextInputType.emailAddress,
@@ -83,10 +82,10 @@ class SignUpScreen extends StatelessWidget {
                     TextFormField(
                       // controller: passController,
                       enabled: !userManager.loading,
-                      decoration: const InputDecoration(hintText: 'パスワード'),
+                      decoration: InputDecoration(hintText: 'パスワード'),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_passComFocusNode);
+                       _passComFocusNode.requestFocus();
                       },
                       autocorrect: false,
                       obscureText: true,
@@ -107,7 +106,7 @@ class SignUpScreen extends StatelessWidget {
                     TextFormField(
                       // controller: passController,
                       enabled: !userManager.loading,
-                      decoration: const InputDecoration(hintText: 'パスワード確認'),
+                      decoration: InputDecoration(hintText: 'パスワード確認'),
                       autocorrect: false,
                       obscureText: true,
                       focusNode: _passComFocusNode,
@@ -163,13 +162,12 @@ class SignUpScreen extends StatelessWidget {
                             },
                       child: userManager.loading
                           ? CircularProgressIndicator(
-                        valueColor:
-                        AlwaysStoppedAnimation(Colors.white),
-                      )
+                              valueColor: AlwaysStoppedAnimation(Colors.white),
+                            )
                           : Text(
-                        '登録',
-                        style: TextStyle(fontSize: 15),
-                      ),
+                              '登録',
+                              style: TextStyle(fontSize: 15),
+                            ),
                     )
                   ],
                 );
